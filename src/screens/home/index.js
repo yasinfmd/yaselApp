@@ -6,6 +6,7 @@ import { Plus } from '../../components/icons'
 import { Box, Text, Fab, BackgroundImage, FocusStatusBar } from '../../components'
 import Consts from '../../consts'
 import { dateDiff } from '../../helpers/utils'
+import Button from '../../components/fab';
 
 const Home = ({ navigation }) => {
   const fabAnimation = useRef(new Animated.Value(-500)).current;
@@ -28,9 +29,13 @@ const Home = ({ navigation }) => {
     <>
       <SafeAreaView style={{ backgroundColor: colors.pageBg, flex: 1, position: 'relative' }}>
         <FocusStatusBar barStyle="light-content" backgroundColor={colors.primary} />
-        <Fab as={Animated.View} alignItems='center' justifyContent='center' size={sizes.size50} borderRadius={radius.full} bg={colors.fab} position='absolute' bottom={fabAnimation} right={position.right10} >
-          <Plus />
-        </Fab>
+
+        <Button size={sizes.size50} borderRadius={radius.full} onPress={() => navigation.navigate('MyModal')} position='absolute' bottom={position.bottom10} right={position.right10}>
+          <Fab as={Animated.View} alignItems='center' justifyContent='center' size={sizes.size50} borderRadius={radius.full} bg={colors.fab} position='absolute' bottom={fabAnimation} right={position.right10} >
+            <Plus />
+          </Fab>
+        </Button>
+
 
         <Box bg={colors.primary} p={space.p20} width={sizes.fullWidth} height={sizes.height350} borderBottomLeftRadius={radius.mid}  >
           <Box flex={1} >

@@ -1,5 +1,4 @@
-import { HomeStackRouter } from './index'
-
+import { RootStackScreen } from './rootStackRouter'
 import Film from '../screens/film'
 import Discover from '../screens/discover'
 
@@ -10,7 +9,7 @@ export const TabRouters = [
     },
     {
         name: 'Home',
-        component: HomeStackRouter,
+        component: RootStackScreen,
 
     },
     {
