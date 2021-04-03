@@ -1,12 +1,12 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { StatusBar, Animated } from 'react-native';
+import { Animated } from 'react-native';
 import SafeAreaView from 'react-native-safe-area-view';
 import { colors, space, sizes, position, radius } from '../../theme';
 import { Plus } from '../../components/icons'
-import { Box, Text, Fab, BackgroundImage } from '../../components'
+import { Box, Text, Fab, BackgroundImage, FocusStatusBar } from '../../components'
 import Consts from '../../consts'
-
 import { dateDiff } from '../../helpers/utils'
+
 const Home = ({ navigation }) => {
   const fabAnimation = useRef(new Animated.Value(-500)).current;
   const [totalDay, setTotalDay] = useState(0)
@@ -27,7 +27,7 @@ const Home = ({ navigation }) => {
   return (
     <>
       <SafeAreaView style={{ backgroundColor: colors.pageBg, flex: 1, position: 'relative' }}>
-        <StatusBar barStyle="dark-content" backgroundColor={colors.primary} />
+        <FocusStatusBar barStyle="light-content" backgroundColor={colors.primary} />
         <Fab as={Animated.View} alignItems='center' justifyContent='center' size={sizes.size50} borderRadius={radius.full} bg={colors.fab} position='absolute' bottom={fabAnimation} right={position.right10} >
           <Plus />
         </Fab>
