@@ -1,8 +1,8 @@
-
 import React from 'react'
 import { createStackNavigator } from '@react-navigation/stack';
-
-import ModalScreen from '../screens/modal'
+//Pages
+import ModalScreen from '../screens/newItemModal'
+//Stack
 const RootStack = createStackNavigator();
 
 import { HomeStackRouter } from './homeStack'

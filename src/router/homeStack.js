@@ -3,6 +3,10 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 //pages
 import Home from '../screens/home'
+
+//stack
+const HomeStack = createStackNavigator();
+
 function DetailsScreen() {
     return (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -11,7 +15,6 @@ function DetailsScreen() {
     );
 }
 
-const HomeStack = createStackNavigator();
 export const HomeStackRouter = () => {
     return (
         <HomeStack.Navigator headerMode="none">
