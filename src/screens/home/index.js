@@ -101,6 +101,8 @@ const Home = ({ navigation }) => {
           <Box justifyContent='center' mb={20}>
             <Title title={Consts.todoListText} />
           </Box>
+
+
           <ScrollView
             showsVerticalScrollIndicator={false}
             showsHorizontalScrollIndicator={false}

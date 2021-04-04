@@ -1,3 +1,4 @@
+export { default as Back } from './Back'
 export { default as Discover } from './Discover'
 export { default as Heart } from './Heart'
 export { default as Plus } from './Plus'
