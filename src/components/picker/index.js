@@ -1,8 +1,10 @@
-import React, { useState } from 'react'
-import { StyleSheet } from 'react-native'
+import React, { useState, useEffect, useMemo } from 'react'
+import { StyleSheet, ActivityIndicator } from 'react-native'
 import RNPickerSelect from 'react-native-picker-select';
 import { Box } from '../../components'
 import Consts from '../../consts'
+import axios from 'axios'
+import { colors } from '../../theme';
 
 //seçili olana renk
 // { label: 'Orange', value: 'orange', color: colors.primary },
@@ -14,18 +16,42 @@ import Consts from '../../consts'
                 { label: 'Hockey', value: 'hockey', color: null },
             ]
 */
-const Picker = ({ items = [], placeholder = {}, defaultValue = {}, selectedValue }) => {
-    const [defaultValue, setDefaultValue] = useState(defaultValue)
+const Picker = ({ placeholder = {}, defaultVal = {}, selectedValue, dataSourceUrl }) => {
+    const [defaultValue, setDefaultValue] = useState(defaultVal);
+    const [dataSourceLoading, setDataSourceLoading] = useState(false);
+    const [items, setItems] = useState([]);
     const setSelectedItem = (value) => {
         setDefaultValue(value)
         //selectedValue(value)
+    };
+    useEffect(() => {
+        setDataSourceLoading(true)
+        fetchOptionsList();
+    }, []);
+
+    const fetchOptionsList = async () => {
+        const { data } = await axios.get('https://morning-garden-20509.herokuapp.com/api/yasel/options')
+        setDataSourceLoading(false)
+        setItems(data)
     }
+
+    const renderCustomIcon = useMemo(() => {
+        console.log('loadmı', dataSourceLoading)
+        if (dataSourceLoading) {
+            return <ActivityIndicator size="small" color={colors.primary} />
+        }
+        return <Box size='20' bg='red' borderRadius={9999} alignItems='center' justifyContent='center' />
+    }, [dataSourceLoading])
+
+
+
     return (
         <RNPickerSelect
+            disabled={dataSourceLoading}
             onValueChange={(value) => { setSelectedItem(value) }}
             value={defaultValue}
             placeholder={placeholder}
-            Icon={() => <Box size='20' bg='red' borderRadius={9999} alignItems='center' justifyContent='center' />}
+            Icon={() => renderCustomIcon}
             useNativeAndroidPickerStyle={false}
             style={{
                 ...pickerSelectStyles, iconContainer: {
