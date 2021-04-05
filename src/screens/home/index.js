@@ -17,8 +17,12 @@ import Consts from '../../consts'
 
 //helpers
 import { dateDiff } from '../../helpers/utils'
+import useMainState from '../../context/Main/useMainState';
+
+import CheckBox from '@react-native-community/checkbox';
 
 const Home = ({ navigation }) => {
+  const [toggleCheckBox, setToggleCheckBox] = useState(false)
   const fabAnimation = useRef(new Animated.Value(-500)).current;
   const [totalDay, setTotalDay] = useState(0)
   useEffect(() => {
@@ -26,6 +30,7 @@ const Home = ({ navigation }) => {
       toValue: position.bottom10,
       duration: 2200
     }).start()
+
   }, [fabAnimation])
 
   const DATA = [
@@ -51,11 +56,11 @@ const Home = ({ navigation }) => {
     },
     {
       id: '58694a0f-3da1-471f-bd96-145571e29d72',
-      title: 'Third Item',
+      title: 'Third Item aaaa',
     },
     {
       id: '58694a0f-3da1-471f-bd96-145571e29d72',
-      title: 'Third Item',
+      title: 'Third Item Selamlar Kardeşlerim Nasılsınız İyimisiniz',
     },
   ];
 
@@ -65,11 +70,27 @@ const Home = ({ navigation }) => {
     setTotalDay(day)
   }, [])
 
+  /*
+  
+      string={`#${index + 1}  Her Gün Daha Çok Sevilecek :)`.length > 45 ? `#${index + 1}  Her Gün Daha Çok Sevilecek :)`.substring(0, Consts.ellipsisLength) + '..' : `#${index + 1}  Her Gün Daha Çok Sevilecek :)`}
+  */
+
   const renderItem = ({ item, index }) => (
     <>
-      <Card >
-        <CardText string={`#${index + 1} Her Gün Daha Çok Sevilecek  ❤️`} />
+      <Card direction='row' last={(DATA.length - 1) === index} >
+        <CardText
+          string={item.title.length > Consts.ellipsisLength ? `#${index + 1} ` + item.title.substring(0, Consts.ellipsisLength) + ` ...` : item.title}
+        />
+        <CheckBox
+          tintColors={{ true: colors.primary, false: colors.pageBg }}
+          hideBox
+          style={{ marginRight: 16 }}
+          disabled={false}
+          value={toggleCheckBox}
+          onValueChange={(newValue) => setToggleCheckBox(newValue)}
+        />
       </Card>
+
     </>
   );
   return (

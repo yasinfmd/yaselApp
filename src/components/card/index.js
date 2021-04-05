@@ -3,9 +3,9 @@ import React from 'react'
 import { Box } from '../../components/'
 //theme
 import { colors, sizes, radius, space } from '../../theme'
-const Card = ({ children }) => {
+const Card = ({ children, direction, last }) => {
     return (
-        <Box bg={colors.white} height={sizes.height56} borderRadius={radius.xsmall} mb={space.mb20} justifyContent='center' pl={space.pl16} >
+        <Box bg={colors.white} flexDirection={direction} alignItems='center' height={sizes.height56} borderRadius={radius.xsmall} mb={last ? sizes.height56 : space.mb20} justifyContent='space-between' pl={space.pl16} >
             {children}
         </Box>
     )

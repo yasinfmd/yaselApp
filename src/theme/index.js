@@ -4,7 +4,9 @@ export const colors = {
   pageBg: '#F1F5ED',
   fab: '#1CA953',
   textColor: '#3C3A36',
-  titleColor: '#333333'
+  titleColor: '#333333',
+  inputText: '#78746D',
+  borderColor: '#BEBAB3'
 };
 
 export const space = {
@@ -16,13 +18,15 @@ export const space = {
   pt10: 10,
   m200: -20,
   pl16: 16,
-  mb20: 20
+  mb20: 20,
+  pv17: 17
 }
 
 export const radius = {
   full: 9999,
   mid: 120,
   small: 20,
+  bsmall: 12,
   xsmall: 8
 }
 export const sizes = {
@@ -46,4 +50,10 @@ export const position = {
 export const font = {
   size12: 12,
   size16: 16,
+  size14: 14
+}
+export const border = {
+
+  xsmall: '0.5px solid',
+  xsmallWidth: 0.5
 }

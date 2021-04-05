@@ -18,6 +18,8 @@ target 'Yasel' do
 
   pod 'RNSound', :path => '../node_modules/react-native-sound'
 
+  pod 'RNCCheckbox', :path => '../node_modules/@react-native-community/checkbox'
+
   target 'YaselTests' do
     inherit! :complete
     # Pods for testing

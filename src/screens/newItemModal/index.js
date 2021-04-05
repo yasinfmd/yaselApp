@@ -1,14 +1,18 @@
 import React from 'react'
-import { View, Text, Button } from 'react-native'
-import { Input, Box } from '../../components'
-
-import { colors, space } from '../../theme'
+import { Input, Box, Picker, FocusStatusBar } from '../../components'
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { colors, space, radius, font, sizes, border } from '../../theme'
 const ModalScreen = ({ navigation, children }) => {
     return (
-        <Box p={space.p20} bg={colors.pageBg}>
-            <Input size={30} bg='#FFFFFF' width='100%' borderRadius={12} fontSize={14} height={56} borderColor='#BEBAB3' pl={space.pl16} py={17} border='1px solid' color='#78746D' />
-
-        </Box>
+        <SafeAreaView style={{ backgroundColor: colors.pageBg, flex: 1, position: 'relative' }}>
+            <FocusStatusBar barStyle="dark-content" backgroundColor={colors.pageBg} />
+            <Box p={space.p20} bg={colors.pageBg}>
+                <Input mb={space.mb20} bg={colors.white} width='100%' borderRadius={radius.bsmall} fontSize={font.size14} height={sizes.height56}
+                    borderColor={colors.borderColor}
+                    pl={space.pl16} py={space.pv17} border={border.xsmall} color={colors.inputText} />
+                <Picker />
+            </Box>
+        </SafeAreaView>
     );
 }
 export default ModalScreen;

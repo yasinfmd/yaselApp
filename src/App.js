@@ -1,10 +1,10 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import SplashScreen from 'react-native-splash-screen';
-import {SafeAreaProvider} from 'react-native-safe-area-context';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import AppRouter from './router';
 import Sound from 'react-native-sound';
 let customInterval;
-
+import { MainProvider } from "./context/Main/store"
 const App = () => {
   useEffect(() => {
     const sound = new Sound('startmusic.mp3', Sound.MAIN_BUNDLE, error => {
@@ -14,9 +14,9 @@ const App = () => {
       }
       sound.play(success => {
         if (success) {
-          console.log('successfully finished playing');
+          console.log('success');
         } else {
-          console.log('playback failed due to audio decoding errors');
+          console.log('error');
         }
       });
     });
@@ -25,16 +25,20 @@ const App = () => {
 
     customInterval = setTimeout(() => {
       SplashScreen.hide();
-      sound.stop(() => {});
+      sound.stop(() => { });
     }, 2000);
     return () => {
       clearInterval(customInterval);
     };
   }, []);
   return (
-    <SafeAreaProvider>
-      <AppRouter />
-    </SafeAreaProvider>
+    <>
+      <MainProvider>
+        <SafeAreaProvider>
+          <AppRouter />
+        </SafeAreaProvider>
+      </MainProvider>
+    </>
   );
 };
 export default App;
