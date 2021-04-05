@@ -1,11 +1,10 @@
 import React from 'react'
 import { createStackNavigator } from '@react-navigation/stack';
 
-import { radius, colors } from '../theme'
+import { colors } from '../theme'
 
-import { Button } from '../components'
+import { BackButton, HeaderRightSave } from '../components'
 
-import { Back } from '../components/icons'
 //Pages
 import ModalScreen from '../screens/newItemModal'
 //Stack
@@ -29,17 +28,12 @@ export const RootStackScreen = () => {
                 headerTitleAlign: 'center',
                 headerLeft: () => {
                     return (
-                        <Button size={46} onPress={() => { navigation.goBack() }} bg={colors.pageBg} borderRadius={radius.full} alignItems='center' justifyContent='center'>
-                            <Back />
-                        </Button>
+                        <BackButton navigation={navigation} />
                     )
                 },
-                // headerRight: () => (
-                //     <Button bg='red' size={30}
-                //         onPress={() => alert('This is a button!')}
-
-                //     />
-                // ),
+                headerRight: () => (
+                    <HeaderRightSave navigation={navigation} />
+                ),
                 headerStyle: {
                     backgroundColor: colors.pageBg,
                     shadowColor: 'transparent'
