@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import { StyleSheet, ActivityIndicator } from 'react-native'
 import RNPickerSelect from 'react-native-picker-select';
-import { Box } from '../../components'
+import { Box, CircleColor } from '../../components'
 import Consts from '../../consts'
 import axios from 'axios'
 import { colors } from '../../theme';
@@ -40,7 +40,7 @@ const Picker = ({ placeholder = {}, defaultVal = {}, selectedValue, dataSourceUr
         if (dataSourceLoading) {
             return <ActivityIndicator size="small" color={colors.primary} />
         }
-        return <Box size='20' bg='red' borderRadius={9999} alignItems='center' justifyContent='center' />
+        return <CircleColor color='red' size={20} />
     }, [dataSourceLoading])
 
 

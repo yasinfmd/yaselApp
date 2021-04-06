@@ -8,16 +8,10 @@ const ModalScreen = ({ navigation, children }) => {
         <SafeAreaView style={{ backgroundColor: colors.pageBg, flex: 1, position: 'relative' }}>
             <FocusStatusBar barStyle="dark-content" backgroundColor={colors.pageBg} />
             <Box p={space.p20} bg={colors.pageBg}>
-                <Input mb={space.mb20} bg={colors.white} width='100%' borderRadius={radius.bsmall} fontSize={font.size14} height={sizes.height56}
+                <Input autoFocus={true} mb={space.mb20} bg={colors.white} width='100%' borderRadius={radius.bsmall} fontSize={font.size14} height={sizes.height56}
                     borderColor={colors.borderColor}
                     pl={space.pl16} py={space.pv17} border={border.xsmall} color={colors.inputText} />
-                <Picker dataSourceUrl='' items={[
-                    { label: 'Football', value: 'football', color: null },
-                    { label: 'Önemli', value: 'orange', color: null, },
-                    { label: 'Football', value: 'football', color: null },
-                    { label: 'Baseball', value: 'baseball', color: null },
-                    { label: 'Hockey', value: 'hockey', color: null },
-                ]} />
+                <Picker dataSourceUrl='' />
             </Box>
         </SafeAreaView>
     );

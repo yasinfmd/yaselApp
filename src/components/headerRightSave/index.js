@@ -7,9 +7,9 @@ import { colors, radius } from '../../theme'
 
 const BackButton = ({ navigation }) => {
     return (
-        <Button size={46} onPress={() => { navigation.goBack() }} bg={colors.pageBg} borderRadius={radius.full} alignItems='center' justifyContent='center'>
+        <Button size={46} onPress={() => { navigation.goBack() }} bg={colors.pageBg} borderRadius={radius.full} alignItems='center' justifyContent='center' >
             <Check />
-        </Button>
+        </Button >
     )
 }
 export default BackButton
