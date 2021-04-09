@@ -30,6 +30,7 @@ export const radius = {
   xsmall: 8
 }
 export const sizes = {
+  size20: 20,
   width24: 24,
   height4: 4,
   size60: 60,
@@ -45,7 +46,9 @@ export const position = {
   bottom10: 10,
   bottom20: 20,
   right20: 20,
-  zIndexFull: 9999
+  zIndexFull: 9999,
+  top20: 20,
+  right16: 16
 }
 export const font = {
   size12: 12,

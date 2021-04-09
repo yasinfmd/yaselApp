@@ -1,62 +1,96 @@
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useState, useEffect, useMemo, useCallback } from 'react'
 import { StyleSheet, ActivityIndicator } from 'react-native'
 import RNPickerSelect from 'react-native-picker-select';
-import { Box, CircleColor } from '../../components'
+import { CircleColor } from '../../components'
 import Consts from '../../consts'
 import axios from 'axios'
-import { colors } from '../../theme';
+import { colors, sizes, position } from '../../theme';
+import NetInfo from "@react-native-community/netinfo";
 
-//seçili olana renk
-// { label: 'Orange', value: 'orange', color: colors.primary },
-/*
-[
-                { label: 'Önemli', value: 'orange', color: null, },
-                { label: 'Football', value: 'football', color: null },
-                { label: 'Baseball', value: 'baseball', color: null },
-                { label: 'Hockey', value: 'hockey', color: null },
-            ]
-*/
-const Picker = ({ placeholder = {}, defaultVal = {}, selectedValue, dataSourceUrl }) => {
+
+
+const Picker = ({ placeholder = {}, defaultVal = {}, customCircle, selectedValue, dataSourceUrl }) => {
+    const [isOffline, setOfflineStatus] = useState(false);
     const [defaultValue, setDefaultValue] = useState(defaultVal);
     const [dataSourceLoading, setDataSourceLoading] = useState(false);
+    const [selectedCircleColor, setSelectedCirclerColor] = useState('#fff')
     const [items, setItems] = useState([]);
     const setSelectedItem = (value) => {
+        if (customCircle) {
+            const isExist = findItem(value)
+            if (isExist) {
+                setSelectedCirclerColor(isExist.customColor)
+            }
+        }
         setDefaultValue(value)
-        //selectedValue(value)
+        // setSelectedValue(value);
     };
+
+    const findItem = (value) => {
+        const finded = items.find((item) => item.value === value)
+        return finded;
+    }
     useEffect(() => {
-        setDataSourceLoading(true)
-        fetchOptionsList();
+        if (defaultValue) {
+            setSelectedValue(defaultValue);
+        }
+    }, [defaultValue])
+    const setSelectedValue = useCallback((value) => {
+        const isExist = findItem(value)
+        if (isExist) {
+            selectedValue(isExist)
+        }
+    }, [])
+
+    useEffect(() => {
+        const removeNetInfoSubscription = NetInfo.addEventListener((state) => {
+            const offline = !(state.isConnected && state.isInternetReachable);
+            console.log('offline', offline)
+            setOfflineStatus(offline);
+        });
+        return () => removeNetInfoSubscription();
     }, []);
 
+    useEffect(() => {
+        if (isOffline === false) {
+            fetchOptionsList();
+        }
+    }, [isOffline])
+
     const fetchOptionsList = async () => {
-        const { data } = await axios.get('https://morning-garden-20509.herokuapp.com/api/yasel/options')
-        setDataSourceLoading(false)
-        setItems(data)
+        setDataSourceLoading(true)
+        try {
+            const { data } = await axios.get('https://morning-garden-20509.herokuapp.com/api/yasel/options')
+            setItems(data)
+
+        } catch (error) {
+            //Errors
+        } finally {
+            setDataSourceLoading(false)
+        }
     }
 
     const renderCustomIcon = useMemo(() => {
-        console.log('loadmı', dataSourceLoading)
         if (dataSourceLoading) {
             return <ActivityIndicator size="small" color={colors.primary} />
         }
-        return <CircleColor color='red' size={20} />
-    }, [dataSourceLoading])
+        return <CircleColor color={selectedCircleColor} size={sizes.size20} />
+    }, [dataSourceLoading, selectedCircleColor, customCircle])
 
 
 
     return (
         <RNPickerSelect
             disabled={dataSourceLoading}
-            onValueChange={(value) => { setSelectedItem(value) }}
+            onValueChange={(value, label) => { setSelectedItem(value, label) }}
             value={defaultValue}
             placeholder={placeholder}
-            Icon={() => renderCustomIcon}
+            Icon={() => customCircle ? renderCustomIcon : null}
             useNativeAndroidPickerStyle={false}
             style={{
                 ...pickerSelectStyles, iconContainer: {
-                    top: 20,
-                    right: 16,
+                    top: position.top20,
+                    right: position.right16,
                 }
             }}
             items={items}

@@ -11,7 +11,9 @@ const ModalScreen = ({ navigation, children }) => {
                 <Input autoFocus={true} mb={space.mb20} bg={colors.white} width='100%' borderRadius={radius.bsmall} fontSize={font.size14} height={sizes.height56}
                     borderColor={colors.borderColor}
                     pl={space.pl16} py={space.pv17} border={border.xsmall} color={colors.inputText} />
-                <Picker dataSourceUrl='' />
+                <Picker dataSourceUrl='' defaultVal={null} customCircle selectedValue={(val) => {
+                    console.log('pickerdan', val)
+                }} />
             </Box>
         </SafeAreaView>
     );
