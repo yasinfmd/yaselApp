@@ -1,20 +1,29 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
 import { StyleSheet, ActivityIndicator } from 'react-native'
+
+//components
 import RNPickerSelect from 'react-native-picker-select';
 import { CircleColor } from '../../components'
+//consts
 import Consts from '../../consts'
-import axios from 'axios'
+
+//colors
 import { colors, sizes, position } from '../../theme';
+
+//packages
 import NetInfo from "@react-native-community/netinfo";
-
-import { API_URL } from "@env"
-
+//service
+import { FetchAllOptions } from '../../service/options'
+//context
+import { useOptionsState, useOptionsActions } from '../../context/Options/store'
 const Picker = ({ placeholder = {}, defaultVal = {}, customCircle, selectedValue, dataSourceUrl }) => {
+    const { optionsList } = useOptionsState();
+    const { setOptions } = useOptionsActions();
     const [isOffline, setOfflineStatus] = useState(false);
     const [defaultValue, setDefaultValue] = useState(defaultVal);
     const [dataSourceLoading, setDataSourceLoading] = useState(false);
     const [selectedCircleColor, setSelectedCirclerColor] = useState('#fff')
-    const [items, setItems] = useState([]);
+    // const [items, setItems] = useState([]);
     const setSelectedItem = (value) => {
         if (customCircle) {
             const isExist = findItem(value)
@@ -25,16 +34,18 @@ const Picker = ({ placeholder = {}, defaultVal = {}, customCircle, selectedValue
         setDefaultValue(value)
         // setSelectedValue(value);
     };
-
+    //find Object
     const findItem = (value) => {
-        const finded = items.find((item) => item.value === value)
+        const finded = optionsList.find((item) => item.value === value)
         return finded;
     }
+    //selectedValue
     useEffect(() => {
         if (defaultValue) {
             setSelectedValue(defaultValue);
         }
     }, [defaultValue])
+    //selectedValue
     const setSelectedValue = useCallback((value) => {
         const isExist = findItem(value)
         if (isExist) {
@@ -42,6 +53,7 @@ const Picker = ({ placeholder = {}, defaultVal = {}, customCircle, selectedValue
         }
     }, [])
 
+    //net connection
     useEffect(() => {
         const removeNetInfoSubscription = NetInfo.addEventListener((state) => {
             const offline = !(state.isConnected && state.isInternetReachable);
@@ -49,26 +61,33 @@ const Picker = ({ placeholder = {}, defaultVal = {}, customCircle, selectedValue
         });
         return () => removeNetInfoSubscription();
     }, []);
-
+    //request 
     useEffect(() => {
         if (isOffline === false) {
             fetchOptionsList();
         }
     }, [isOffline])
-
+    //request
     const fetchOptionsList = async () => {
         setDataSourceLoading(true)
         try {
-            const { data } = await axios.get('https://morning-garden-20509.herokuapp.com/api/yasel/options')
-            setItems(data)
-
+            if (optionsList.length === 0) {
+                const result = await FetchAllOptions(dataSourceUrl)
+                if (result.isSuccess === true) {
+                    setOptions(result.result)
+                    //setSelectedItem(result.result[0].value)
+                    //setItems(result.result)
+                }
+            } else {
+                setSelectedItem(optionsList[0].value)
+            }
         } catch (error) {
             //Errors
         } finally {
             setDataSourceLoading(false)
         }
     }
-
+    //loadingIcon
     const renderCustomIcon = useMemo(() => {
         if (dataSourceLoading) {
             return <ActivityIndicator size="small" color={colors.primary} />
@@ -80,6 +99,7 @@ const Picker = ({ placeholder = {}, defaultVal = {}, customCircle, selectedValue
 
     return (
         <RNPickerSelect
+            fixAndroidTouchableBug={true}
             disabled={dataSourceLoading}
             onValueChange={(value, label) => { setSelectedItem(value, label) }}
             value={defaultValue}
@@ -92,10 +112,10 @@ const Picker = ({ placeholder = {}, defaultVal = {}, customCircle, selectedValue
                     right: position.right16,
                 }
             }}
-            items={items}
+            items={optionsList}
         />
     )
 }
 const pickerSelectStyles = StyleSheet.create(Consts.defaultPickerStyle);
 
-export default Picker
+export default React.memo(Picker)

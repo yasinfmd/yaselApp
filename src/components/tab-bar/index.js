@@ -14,7 +14,6 @@ import { colors, space } from '../../theme/index'
 
 LogBox.ignoreAllLogs();
 function TabBar({ state, descriptors, navigation }) {
-    console.log('state', state)
     const [activeRouteIndex, setActiveRouteIndex] = useState(state.index)
     const paddingAnimation = useRef(new Animated.Value(0)).current;
     const marginAnimation = useRef(new Animated.Value(space.m400)).current;

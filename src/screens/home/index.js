@@ -8,9 +8,9 @@ import {
 import { colors, space, sizes, position, radius } from '../../theme';
 
 //icons
-import { Plus, Cancel, Delete } from '../../components/icons'
+import { Plus } from '../../components/icons'
 //components
-import { Box, Text, Fab, FocusStatusBar, Card, Button, CardText, SwipeList, Modal, SummaryItem, PageImageBox, ListHiddenItem, CustomSafeAreaView } from '../../components'
+import { Box, Fab, Card, Button, CardText, SwipeList, Modal, SummaryItem, PageImageBox, ListHiddenItem, CustomSafeAreaView } from '../../components'
 import CheckBox from '@react-native-community/checkbox';
 
 

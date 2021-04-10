@@ -5,6 +5,8 @@ import AppRouter from './router';
 import Sound from 'react-native-sound';
 let customInterval;
 import { MainProvider } from "./context/Main/store"
+import { OptionsProvider } from "./context/Options/store"
+
 const App = () => {
   useEffect(() => {
     const sound = new Sound('startmusic.mp3', Sound.MAIN_BUNDLE, error => {
@@ -34,9 +36,11 @@ const App = () => {
   return (
     <>
       <MainProvider>
-        <SafeAreaProvider>
-          <AppRouter />
-        </SafeAreaProvider>
+        <OptionsProvider>
+          <SafeAreaProvider>
+            <AppRouter />
+          </SafeAreaProvider>
+        </OptionsProvider>
       </MainProvider>
     </>
   );
