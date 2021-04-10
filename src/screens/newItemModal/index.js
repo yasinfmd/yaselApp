@@ -1,12 +1,11 @@
 import React, { useEffect } from 'react'
-import { Input, Box, Picker, FocusStatusBar } from '../../components'
+import { Input, Box, Picker, FocusStatusBar, CustomSafeAreaView } from '../../components'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { colors, space, radius, font, sizes, border } from '../../theme'
 const ModalScreen = ({ navigation, children }) => {
 
     return (
-        <SafeAreaView style={{ backgroundColor: colors.pageBg, flex: 1, position: 'relative' }}>
-            <FocusStatusBar barStyle="dark-content" backgroundColor={colors.pageBg} />
+        <CustomSafeAreaView barStyle='dark-content' statusBarColor={colors.pageBg} backgroundColor={colors.pageBg}>
             <Box p={space.p20} bg={colors.pageBg}>
                 <Input autoFocus={true} mb={space.mb20} bg={colors.white} width='100%' borderRadius={radius.bsmall} fontSize={font.size14} height={sizes.height56}
                     borderColor={colors.borderColor}
@@ -15,7 +14,7 @@ const ModalScreen = ({ navigation, children }) => {
                     console.log('pickerdan', val)
                 }} />
             </Box>
-        </SafeAreaView>
+        </CustomSafeAreaView>
     );
 }
 export default ModalScreen;

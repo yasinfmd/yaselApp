@@ -1,19 +1,17 @@
 import React from 'react';
 import { Button } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { Box, BoxCenter, FocusStatusBar } from '../../components'
+import { Box, BoxCenter, CustomSafeAreaView } from '../../components'
 import { colors } from '../../theme'
 const Film = ({ navigation }) => {
     return (
-        <SafeAreaView style={{ backgroundColor: colors.pageBg, flex: 1, position: 'relative' }}>
-            <FocusStatusBar barStyle="dark-content" backgroundColor={colors.pageBg} />
+        <CustomSafeAreaView barStyle='dark-content' statusBarColor={colors.pageBg} backgroundColor={colors.pageBg}>
             <BoxCenter>
                 <Button
                     title="Seni Seviyorum 2"
                     onPress={() => navigation.navigate('Detail')}
                 />
             </BoxCenter>
-        </SafeAreaView>
+        </CustomSafeAreaView>
     );
 };
 export default Film;

@@ -7,7 +7,7 @@ import axios from 'axios'
 import { colors, sizes, position } from '../../theme';
 import NetInfo from "@react-native-community/netinfo";
 
-
+import { API_URL } from "@env"
 
 const Picker = ({ placeholder = {}, defaultVal = {}, customCircle, selectedValue, dataSourceUrl }) => {
     const [isOffline, setOfflineStatus] = useState(false);
@@ -45,7 +45,6 @@ const Picker = ({ placeholder = {}, defaultVal = {}, customCircle, selectedValue
     useEffect(() => {
         const removeNetInfoSubscription = NetInfo.addEventListener((state) => {
             const offline = !(state.isConnected && state.isInternetReachable);
-            console.log('offline', offline)
             setOfflineStatus(offline);
         });
         return () => removeNetInfoSubscription();

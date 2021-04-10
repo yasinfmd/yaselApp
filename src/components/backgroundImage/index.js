@@ -14,4 +14,4 @@ const BackgroundImage = ({ image, radius, ...props }) => {
         </ImageBackground>
     )
 }
-export default BackgroundImage
+export default React.memo(BackgroundImage)
