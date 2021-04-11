@@ -2,6 +2,9 @@ import { colors, sizes, space, radius, font, border } from '../theme'
 const Consts = {
     homePageText: 'Gece Ayın ve Yıldızların Parladıgı Gün',
     todoListText: 'Yapılacaklar Listesi',
+    newTodoTitle: 'Yapılacak İş',
+    newTodoPlaceholder: 'Yapılacak İşler Buraya Girilmelidir😊',
+    newTodoPriortyTitle: 'Öncelik',
     defaultShadow: {
         shadowColor: "#000",
         shadowOffset: {

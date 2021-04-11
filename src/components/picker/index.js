@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { StyleSheet, ActivityIndicator } from 'react-native'
 
 //components
 import RNPickerSelect from 'react-native-picker-select';
-import { CircleColor } from '../../components'
+import { CircleColor, Button } from '../../components'
 //consts
 import Consts from '../../consts'
 
@@ -25,6 +25,7 @@ const Picker = ({ placeholder = {}, defaultVal = {}, customCircle, selectedValue
     const [selectedCircleColor, setSelectedCirclerColor] = useState('#fff')
     // const [items, setItems] = useState([]);
     const setSelectedItem = (value) => {
+        console.log('eleman değişti')
         if (customCircle) {
             const isExist = findItem(value)
             if (isExist) {
@@ -32,26 +33,32 @@ const Picker = ({ placeholder = {}, defaultVal = {}, customCircle, selectedValue
             }
         }
         setDefaultValue(value)
+        //setSelectedValue(value);
         // setSelectedValue(value);
     };
     //find Object
     const findItem = (value) => {
-        const finded = optionsList.find((item) => item.value === value)
-        return finded;
+        if (optionsList.length > 0) {
+            const finded = optionsList.find((item) => item.value === value)
+            return finded;
+        }
+        return null
     }
     //selectedValue
     useEffect(() => {
         if (defaultValue) {
-            setSelectedValue(defaultValue);
+            if (optionsList.length > 0) {
+                setSelectedValue(defaultValue);
+            }
         }
-    }, [defaultValue])
+    }, [defaultValue, optionsList])
     //selectedValue
-    const setSelectedValue = useCallback((value) => {
+    const setSelectedValue = (value) => {
         const isExist = findItem(value)
         if (isExist) {
             selectedValue(isExist)
         }
-    }, [])
+    }
 
     //net connection
     useEffect(() => {
@@ -75,6 +82,8 @@ const Picker = ({ placeholder = {}, defaultVal = {}, customCircle, selectedValue
                 const result = await FetchAllOptions(dataSourceUrl)
                 if (result.isSuccess === true) {
                     setOptions(result.result)
+                    //setDefaultValue(result.result[0].value)
+
                     //setSelectedItem(result.result[0].value)
                     //setItems(result.result)
                 }
@@ -87,6 +96,7 @@ const Picker = ({ placeholder = {}, defaultVal = {}, customCircle, selectedValue
             setDataSourceLoading(false)
         }
     }
+
     //loadingIcon
     const renderCustomIcon = useMemo(() => {
         if (dataSourceLoading) {
@@ -103,6 +113,9 @@ const Picker = ({ placeholder = {}, defaultVal = {}, customCircle, selectedValue
             disabled={dataSourceLoading}
             onValueChange={(value, label) => { setSelectedItem(value, label) }}
             value={defaultValue}
+            onOpen={() => {
+                console.log('asdasdasd')
+            }}
             placeholder={placeholder}
             Icon={() => customCircle ? renderCustomIcon : null}
             useNativeAndroidPickerStyle={false}
@@ -118,4 +131,4 @@ const Picker = ({ placeholder = {}, defaultVal = {}, customCircle, selectedValue
 }
 const pickerSelectStyles = StyleSheet.create(Consts.defaultPickerStyle);
 
-export default React.memo(Picker)
+export default Picker

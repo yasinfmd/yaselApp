@@ -56,6 +56,8 @@ const DATA = [
     title: 'Third Item Selamlar Kardeşlerim Nasılsınız İyimisiniz',
   },
 ];
+
+import axios from 'axios'
 const Home = ({ navigation }) => {
   const [rowTranslateAnimatedValues, setRowAnimation] = useState({})
   const [todoListLoading, setTodoListLoading] = useState(false)
@@ -85,9 +87,8 @@ const Home = ({ navigation }) => {
 
   }, [fabAnimation])
 
-
-
   useEffect(() => {
+
     const today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 0, 0, 0, 0)
     const day = dateDiff(today);
     setTotalDay(day)
@@ -175,7 +176,7 @@ const Home = ({ navigation }) => {
           </Fab>
         </Button>
         <Modal visible={modalVisible} />
-        <PageImageBox image={require('../../images/background.jpg')} mainText={Consts.homePageText} subText={`# ${totalDay}`} />
+        <PageImageBox image={require('../../images/wallpaper.jpeg')} mainText={Consts.homePageText} subText={`# ${totalDay}`} />
         <Box flex={1} p={space.p20}>
           <SummaryItem />
           <ScrollView

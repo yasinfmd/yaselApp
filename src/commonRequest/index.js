@@ -6,7 +6,11 @@ import { API_URL } from "@env"
 let defaultHeader = {
     'Content-Type': 'application/json'
 }
-
+// if (__DEV__) {
+//     console.log('Development Requestten');
+// } else {
+//     console.log('Production');
+// }
 const baseUrl = API_URL
 // if (token !== undefined && token !== null) {
 //     try {

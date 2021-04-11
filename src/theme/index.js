@@ -19,7 +19,8 @@ export const space = {
   m200: -20,
   pl16: 16,
   mb20: 20,
-  pv17: 17
+  pv17: 17,
+  mb10: 10
 }
 
 export const radius = {
