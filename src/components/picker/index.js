@@ -16,7 +16,7 @@ import NetInfo from "@react-native-community/netinfo";
 import { FetchAllOptions } from '../../service/options'
 //context
 import { useOptionsState, useOptionsActions } from '../../context/Options/store'
-const Picker = ({ placeholder = {}, defaultVal = {}, customCircle, selectedValue, dataSourceUrl }) => {
+const Picker = ({ placeholder = {}, defaultVal = {}, customCircle, selectedValue, dataSourceUrl, isLoad }) => {
     const { optionsList } = useOptionsState();
     const { setOptions } = useOptionsActions();
     const [isOffline, setOfflineStatus] = useState(false);
@@ -94,6 +94,7 @@ const Picker = ({ placeholder = {}, defaultVal = {}, customCircle, selectedValue
             //Errors
         } finally {
             setDataSourceLoading(false)
+            isLoad(true)
         }
     }
 

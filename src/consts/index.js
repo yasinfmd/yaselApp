@@ -3,8 +3,12 @@ const Consts = {
     homePageText: 'Gece Ayın ve Yıldızların Parladıgı Gün',
     todoListText: 'Yapılacaklar Listesi',
     newTodoTitle: 'Yapılacak İş',
-    newTodoPlaceholder: 'Yapılacak İşler Buraya Girilmelidir😊',
+    newTodoPlaceholder: 'Yapılacak İşler Buraya Girilmelidir',
     newTodoPriortyTitle: 'Öncelik',
+    buttonPositive: 'İzin Ver',
+    buttonNegative: 'Vazgeç',
+    permissionTitle: 'İzin',
+    permissionMessage: 'Uygulama İzni',
     defaultShadow: {
         shadowColor: "#000",
         shadowOffset: {
@@ -16,6 +20,8 @@ const Consts = {
         elevation: 10
     },
     ellipsisLength: 42,
+    openCamera: 'Kamerayı Aç',
+    pickPhoto: 'Galeriden Seç',
     defaultPickerStyle: {
         inputIOS: {
             backgroundColor: colors.white,
