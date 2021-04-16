@@ -7,8 +7,12 @@ import { BackButton, HeaderRightSave } from '../components'
 
 //Pages
 import ModalScreen from '../screens/newItemModal'
+import PhotosScreen from '../screens/photosModal'
 //Stack
 const RootStack = createStackNavigator();
+
+//emojiConsts
+import { EmojiConsts } from '../emojiConsts'
 
 import { HomeStackRouter } from './homeStack'
 export const RootStackScreen = () => {
@@ -20,7 +24,7 @@ export const RootStackScreen = () => {
                 options={{ headerShown: false }}
             />
             <RootStack.Screen name="newItemModal" component={ModalScreen} options={({ route, navigation }) => ({
-                title: 'Seni  Seviyorum ❤️  ',
+                title: `Yeni Görev`,
                 headerTitleStyle: {
                     fontFamily: 'BadScript-Regular'
                 },
@@ -37,9 +41,9 @@ export const RootStackScreen = () => {
                 headerStyle: {
                     backgroundColor: colors.pageBg,
                     shadowColor: 'transparent'
-
                 },
             })} />
+            <RootStack.Screen name='photosModal' component={PhotosScreen} />
         </RootStack.Navigator>
     );
 }

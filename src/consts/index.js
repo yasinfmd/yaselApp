@@ -1,4 +1,6 @@
+import React from 'react'
 import { colors, sizes, space, radius, font, border } from '../theme'
+import { Camera, Folder, Cancel } from '../components/icons'
 const Consts = {
     homePageText: 'Gece Ayın ve Yıldızların Parladıgı Gün',
     todoListText: 'Yapılacaklar Listesi',
@@ -22,6 +24,7 @@ const Consts = {
     ellipsisLength: 42,
     openCamera: 'Kamerayı Aç',
     pickPhoto: 'Galeriden Seç',
+    cameraOptions: [{ id: 1, label: 'Kamera', icon: <Camera /> }, { id: 2, label: 'Galeri', icon: <Folder /> }, { id: 0, label: 'Vazgeç', icon: <Cancel /> }],
     defaultPickerStyle: {
         inputIOS: {
             backgroundColor: colors.white,

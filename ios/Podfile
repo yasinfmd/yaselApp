@@ -20,6 +20,8 @@ target 'Yasel' do
 
   pod 'RNCCheckbox', :path => '../node_modules/@react-native-community/checkbox'
 
+  pod 'react-native-cameraroll', :path => '../node_modules/@react-native-community/cameraroll'
+
   target 'YaselTests' do
     inherit! :complete
     # Pods for testing

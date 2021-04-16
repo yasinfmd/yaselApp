@@ -20,7 +20,9 @@ export const space = {
   pl16: 16,
   mb20: 20,
   pv17: 17,
-  mb10: 10
+  mb10: 10,
+  p2: 2,
+  mr20: 20
 }
 
 export const radius = {
@@ -39,7 +41,9 @@ export const sizes = {
   height56: 56,
   height350: 350,
   fullWidth: '100%',
-  fullHeight: '100%'
+  fullHeight: '100%',
+  height150: 150,
+  height100: 100
 }
 
 export const position = {
@@ -59,5 +63,12 @@ export const font = {
 export const border = {
 
   xsmall: '0.5px solid',
-  xsmallWidth: 0.5
+  xsmallWidth: 0.5,
+  large: 2
+}
+
+export const opacity = {
+  full: 1,
+  opacity3: 0.3,
+  opacity4: 0.4
 }

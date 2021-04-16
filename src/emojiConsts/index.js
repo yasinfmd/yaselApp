@@ -2,5 +2,7 @@ export const EmojiConsts = {
     camera: '📷',
     attention: '❗️',
     folder: '📁',
-    smile: '😊'
+    smile: '😊',
+    mfinger: '🖕',
+    pen: '🖊️'
 }

@@ -20,13 +20,16 @@ function TabBar({ state, descriptors, navigation }) {
     useEffect(() => {
         Animated.timing(paddingAnimation, {
             toValue: space.p10,
-            duration: 2200
+            duration: 2200,
+            useNativeDriver: false
         }).start()
     }, [paddingAnimation])
     useEffect(() => {
         Animated.timing(marginAnimation, {
             toValue: space.zero,
-            duration: 2200
+            duration: 2200,
+            useNativeDriver: false
+
         }).start()
     }, [marginAnimation])
 

@@ -2,6 +2,8 @@
 #
 .DS_Store
 
+src/
+images
 # Xcode
 #
 build/

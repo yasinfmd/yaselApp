@@ -13,7 +13,6 @@ import { Plus } from '../../components/icons'
 import { Box, Fab, Card, Button, CardText, SwipeList, Modal, SummaryItem, PageImageBox, ListHiddenItem, CustomSafeAreaView } from '../../components'
 import CheckBox from '@react-native-community/checkbox';
 
-
 //consts
 import Consts from '../../consts'
 
@@ -57,7 +56,6 @@ const DATA = [
   },
 ];
 
-import axios from 'axios'
 const Home = ({ navigation }) => {
   const [rowTranslateAnimatedValues, setRowAnimation] = useState({})
   const [todoListLoading, setTodoListLoading] = useState(false)
@@ -82,7 +80,8 @@ const Home = ({ navigation }) => {
   useEffect(() => {
     Animated.timing(fabAnimation, {
       toValue: position.bottom10,
-      duration: 2200
+      duration: 2200,
+      useNativeDriver: false
     }).start()
 
   }, [fabAnimation])
