@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useLayoutEffect } from 'react'
 
 //components
-import { Input, Box, Picker, CustomSafeAreaView, FormLabel, Button, Text, SubPopup } from '../../components'
+import { Input, Box, Picker, CustomSafeAreaView, FormLabel, Button, Text, SubPopup, DeletablePhoto, HeaderRightSave } from '../../components'
 
 //consts
 import Consts from '../../consts'
@@ -9,7 +9,7 @@ import Consts from '../../consts'
 //theme
 import { colors, space, radius, font, sizes, border } from '../../theme'
 
-import { Keyboard, Animated, BackHandler } from 'react-native'
+import { Keyboard, Animated, BackHandler, ScrollView, ActivityIndicator } from 'react-native'
 
 //emoji
 import { EmojiConsts } from '../../emojiConsts'
@@ -24,72 +24,70 @@ import CameraRoll from "@react-native-community/cameraroll";
 
 import { useIsFocused } from '@react-navigation/native';
 
+import { createNewTodo, isExist } from '../../service/home'
 
 const ModalScreen = ({ navigation, route, children }) => {
     const myInputRef = useRef(null)
     const [dynamicHeight, setDynamicHeight] = useState(sizes.height56)
     const [imageList, setImageList] = useState([])
     const [cameraPhoto, setCameraPhoto] = useState(null)
-    const subPopupAnimation = useRef(new Animated.Value(0)).current;
-    const [showSubPopup, setShowSubPopup] = useState(false)
+    const [animationValue, setAnimationValue] = useState(-1000)
+    const subPopupAnimation = useRef(new Animated.Value(animationValue)).current;
     const [cameraOptions, setCameraOptions] = useState([])
     const isFocused = useIsFocused();
-
+    const [newTodoModel, setNewTodoModel] = useState({ name: '', image: null, priorty: null })
+    const [isExistTodo, setIsExistTodo] = useState(false)
+    const [isExistLoading, setIsExistLoading] = useState(false)
+    const [createLoading, setCreateLoading] = useState(false)
     React.useEffect(() => {
         if (route.params?.images) {
-            setImageList(route.params?.images)
-            // console.log('ımagess', route.params?.images)
-            // Post updated, do something with `route.params.post`
-            // For example, send the post to the server
-        }
-    }, [route.params?.images]);
+            const list = route.params?.images.map((item, index) => {
+                return item[1]
+            })
+            setImageList(list)
+            onFormChange('image', list)
 
+
+        }
+    }, [route.params?.images, route.params?.selectedAlbum]);
+
+    const closeAnimation = () => {
+        Animated.timing(subPopupAnimation, {
+            useNativeDriver: false,
+            toValue: -1000,
+            duration: 350
+        }).start()
+        setAnimationValue(-1000)
+    }
     useEffect(() => {
         if (isFocused === false) {
-            setShowSubPopup(false)
+            closeAnimation()
         }
     }, [isFocused])
-    useEffect(() => {
-        if (showSubPopup === true) {
-            Animated.timing(subPopupAnimation, {
-                toValue: 150,
-                duration: 400,
-                useNativeDriver: false
-            }).start()
-        } else {
-            Animated.timing(subPopupAnimation, {
-                toValue: 0,
-                duration: 400,
-                useNativeDriver: false
-
-            }).start()
-        }
-
-
-    }, [subPopupAnimation, showSubPopup])
-
     //back button handler
-    useEffect(() => {
+    // useEffect(() => {
 
-        const backAction = () => {
-            if (showSubPopup === true) {
-                setShowSubPopup(false)
-            } else {
-                BackHandler.exitApp();
-            }
-            return true;
-        };
+    //     const backAction = () => {
+    //         if (animationValue === 0) {
+    //             setAnimationValue(-1000)
+    //         } else {
+    //             BackHandler.exitApp();
+    //         }
+    //         return true;
+    //     };
 
-        const backHandler = BackHandler.addEventListener(
-            "hardwareBackPress",
-            backAction
-        );
-        if (setShowSubPopup === true) {
-            setShowSubPopup(false)
-        }
+    //     const backHandler = BackHandler.addEventListener(
+    //         "hardwareBackPress",
+    //         backAction
+    //     );
+    //     if (animationValue === 0) {
+    //         setAnimationValue(-1000)
+    //     }
 
-        return () => backHandler.remove();
-    }, [showSubPopup]);
+    //     return () => backHandler.remove();
+    // }, [animationValue]);
+
+
     const checkCameraPermission = async () => {
         const cameraResult = await checkPermissionResult('CAMERA', `${EmojiConsts.camera} Yasel Uygulaması Kamera Erişimi`, `Uygulamaya Fotoğraf yüklemek için izin vermeniz gerekmektedir ${EmojiConsts.attention}`);
         return cameraResult
@@ -100,12 +98,23 @@ const ModalScreen = ({ navigation, route, children }) => {
             ImagePicker.openCamera({
                 width: 300,
                 height: 400,
-                cropping: true,
                 mediaType: 'photo',
                 includeExif: true,
                 useFrontCamera: true
             }).then(image => {
-                console.log(image);
+                const splited = image.path.split('.')
+                const ext = '.' + splited[splited.length - 1]
+                const splitedPath = splited[splited.length - 2].split('/')
+                const fileName = splitedPath[splitedPath.length - 1]
+                setCameraPhoto({
+                    uri: image.path,
+                    width: image.width,
+                    height: image.height,
+                    file_name: fileName + ext
+                })
+                toggleAnimation()
+                //setAnimationValue(animationValue === 0 ? -1000 : 0)
+                setImageList([])
             }).catch((error) => {
                 console.log('error', error)
             })
@@ -115,15 +124,35 @@ const ModalScreen = ({ navigation, route, children }) => {
         if (item.showNewPage === false) {
             takePhoto()
         } else {
+            setCameraPhoto(null)
             navigation.navigate('photosModal', {
                 selectedAlbum: item.label,
                 albumCount: item.count
             });
         }
     }
-    useEffect(() => {
-        getAlbums();
+    useLayoutEffect(() => {
+        if (createLoading === true) {
+            navigation.setOptions({
+                headerRight: () => (
+                    <ActivityIndicator style={{ marginRight: 16 }} size='small' color={colors.primary} />
+                ),
+            });
+        } else {
+            navigation.setOptions({
+                headerRight: () => (
+                    <HeaderRightSave navigation={navigation} onSavePress={() => {
+                        onFormControl();
+                    }} />
+                ),
+            });
+        }
+
+    }, [navigation, newTodoModel, createLoading, cameraPhoto]);
+    useLayoutEffect(() => {
+        getAlbums()
     }, [])
+
     const getAlbums = async () => {
         const cameraResult = await checkCameraPermission();
         const readStorageResult = await checkPermissionResult('READ_EXTERNAL_STORAGE', `${EmojiConsts.folder} Yasel Uygulaması Resim Erişimi`, `Uygulamaya Galerinizden Fotoğraf yüklemek için izin vermeniz gerekmektedir ${EmojiConsts.attention}`);
@@ -135,87 +164,163 @@ const ModalScreen = ({ navigation, route, children }) => {
                 cameraOptList = [...cameraOptList, { id: index + 2, count: item.count, showNewPage: true, label: item.title, icon: <Folder /> }]
             })
         }
-        cameraOptList.push({ id: 0, label: 'Vazgeç', showNewPage: false, icon: <Cancel /> })
+        cameraOptList = [...cameraOptList, { id: 0, label: 'Vazgeç', showNewPage: false, icon: <Cancel /> }]
         setCameraOptions(cameraOptList)
     }
+    const deleteImage = (item, type, setFunction) => {
+        if (type === 'single') {
+            setFunction(null)
+        } else {
+            const removedImage = imageList.filter((image) => item.id !== image.id)
+            setFunction(removedImage)
+        }
+    }
+    const isExistTodoName = async (text) => {
+        setIsExistLoading(true)
+        try {
+            const { result } = await isExist(`todoExist?name=${text}`)
+            return result.isExist
+        } catch (error) {
+        }
 
+    }
+    const onTodoNameChange = async (text) => {
+        onFormChange('name', text)
+        if (text.length > 2) {
+            const isExist = await isExistTodoName(text);
 
+            setIsExistTodo(isExist)
+        } else {
+            setIsExistTodo(false)
+        }
+        setIsExistLoading(false)
+    }
 
-    const pickImages = async () => {
-        // 0 izin yok 1 var
+    const onFormChange = (label, value) => {
 
-        ImagePicker.openPicker({
-            multiple: true,
-            mediaType: 'photo',
-            compressImageQuality: 0.8,
-            includeBase64: false
-        }).then(images => {
-            setImageList(images)
-            const data = new FormData();
-            for (let index = 0; index < images.length; index++) {
-                let length = images[index].path.split('/').length
+        setNewTodoModel({ ...newTodoModel, [label]: value })
+    }
+    const onFormControl = () => {
+
+        const data = new FormData();
+        if (cameraPhoto) {
+            for (let index = 0; index < 1; index++) {
                 data.append('files', {
-                    name: images[index].path.split('/')[length - 1],
-                    type: images[index].mime,
-                    uri: images[index].path
-                });
+                    name: cameraPhoto.file_name,
+                    type: "image/jpeg",
+                    uri: cameraPhoto.uri
+                })
             }
-            data.append('ad', 'Yasin')
-            data.append('soyad', '12323')
 
-            console.log('formData', data)
-            console.log(images);
-        });
+        } else {
+            newTodoModel?.image?.forEach((item) => {
+                data.append('files', {
+                    name: item.file_name,
+                    type: item.type,
+                    uri: item.uri
+                });
+            })
+        }
+        data.append('categoryId', 1)
+        data.append('name', newTodoModel.name)
+        data.append('priorty', newTodoModel.priorty.value)
+        setCreateLoading(true)
+        saveTodo(data)
+    }
+
+    const resetForm = () => {
+        setNewTodoModel({ name: '', image: null, priorty: null })
+        setCameraPhoto(null)
+        setImageList([])
+        Keyboard.dismiss()
+    }
+
+    const saveTodo = async (data) => {
+        try {
+            const result = await createNewTodo('todo', data, {
+                'Content-Type': 'multipart/form-data'
+            })
+            if (result.isSuccess && !result.error) {
+                resetForm()
+                navigation.goBack()
+            }
+        } catch (error) {
+        } finally {
+            setCreateLoading(false)
+        }
 
 
-        //data.append("files[]", );
-        // images.forEach((item, index) => { })
-        // axios.post('http://192.168.1.106:3000/api/yasel/test', data, {
-        //     headers: {
-        //         'Content-Type': 'multipart/form-data'
-        //     },
-        // }
-        // ).then(function (res) {
-        //     debugger
-        // })
-        //     .catch(function (err) {
-        //         debugger
-        //     });
+
+    }
+    const toggleAnimation = () => {
+        const val = animationValue === 0 ? -1000 : 0
+        Animated.timing(subPopupAnimation, {
+            useNativeDriver: false,
+            toValue: val,
+            duration: 350
+        }).start()
+        setAnimationValue(val)
     }
     return (
         <CustomSafeAreaView barStyle='dark-content' statusBarColor={colors.pageBg} backgroundColor={colors.pageBg}>
             <Box p={space.p20} bg={colors.pageBg} onTouchStart={() => {
-                setShowSubPopup(showSubPopup === true ? setShowSubPopup(false) : setShowSubPopup(true))
+
             }}>
-                <FormLabel title={Consts.newTodoTitle} />
-                <Input onFocus={() => { setShowSubPopup(false) }} ref={myInputRef} placeholder={`${Consts.newTodoPlaceholder} ${EmojiConsts.smile}`} showSoftInputOnFocus={true} multiline={true} returnKeyType='done'
-                    onSubmitEditing={(e) => {
-                    }}
-                    onContentSizeChange={(e) => {
-                        e.nativeEvent.contentSize.height > sizes.height56 ? setDynamicHeight(e.nativeEvent.contentSize.height) : sizes.height56
-                    }} blurOnSubmit={true} mb={space.mb20} bg={colors.white} width='100%' borderRadius={radius.bsmall} fontSize={font.size14} maxHeight={200} height={dynamicHeight}
-                    borderColor={colors.borderColor}
-                    pl={space.pl16} py={space.pv17} border={border.xsmall} color={colors.inputText} />
-                <FormLabel title={Consts.newTodoPriortyTitle} />
-                <Picker dataSourceUrl='options' defaultVal={null} isLoad={(val) => {
-                    myInputRef.current.focus()
-                }} customCircle selectedValue={(val) => {
-                    Keyboard.dismiss();
-                }} />
+                <Box >
+                    <FormLabel title={Consts.newTodoTitle} />
+                    <Input value={newTodoModel.name} ref={myInputRef} placeholder={`${Consts.newTodoPlaceholder} ${EmojiConsts.smile}`} showSoftInputOnFocus={true} multiline={true} returnKeyType='done'
+                        onSubmitEditing={(e) => {
+                        }}
+                        onChangeText={(text) => {
+                            text.trim().length === 0 && setDynamicHeight(sizes.height56)
+                            onTodoNameChange(text);
+                        }}
+                        onContentSizeChange={(e) => {
+                            e.nativeEvent.contentSize.height > sizes.height56 ? setDynamicHeight(e.nativeEvent.contentSize.height) : sizes.height56
+                        }} blurOnSubmit={true} mb={space.mb20} bg={colors.white} width='100%' borderRadius={radius.bsmall} fontSize={font.size14} maxHeight={200} height={dynamicHeight}
+                        borderColor={isExistTodo ? 'red' : colors.borderColor}
+                        pl={space.pl16} py={space.pv17} pr={60} border={border.xsmall} color={colors.inputText} />
+                    {isExistLoading === true && <ActivityIndicator color='red' size='small' style={{ position: 'absolute', right: 20, top: 42, }} />}
+
+                </Box>
+                <Box>
+                    <FormLabel title={Consts.newTodoPriortyTitle} />
+                    <Picker dataSourceUrl='options' defaultVal={null} isLoad={(val) => {
+                        myInputRef.current.focus()
+                    }} customCircle selectedValue={(val) => {
+                        onFormChange('priorty', val)
+                        Keyboard.dismiss();
+                    }} />
+                </Box>
                 <Box alignItems='center' justifyContent='center'>
                     <Button mt={space.mr20} onPress={() => {
                         Keyboard.dismiss();
-                        setShowSubPopup(!showSubPopup)
+                        toggleAnimation()
                     }}><Camera /></Button>
                 </Box>
-                <FormLabel title={'Seçilen Fotoğraflar'} />
-                <Box>
-                    {/*  !TODO */}
-                </Box>
+
             </Box>
-            {showSubPopup && <SubPopup data={cameraOptions} onPressItem={(item) => {
-                item.id === 0 ? setShowSubPopup(false) : selectedPopupItem(item)
-            }} />}
+            <Box alignItems='center' justifyContent='center'>
+                {imageList.length > 0 && <FormLabel title={`${route.params?.selectedAlbum ? route.params?.selectedAlbum.toUpperCase() + ' ' + 'Albümünden' : ''}  Seçilen Fotoğraflar`} />}
+                {imageList.length > 0 && <Text> {imageList.length}</Text>}
+                {cameraPhoto !== null && <FormLabel title={`Çekilen Fotoğraf`} />}
+
+            </Box>
+            <ScrollView style={{ padding: 10 }} showsVerticalScrollIndicator={false}
+                showsHorizontalScrollIndicator={false}>
+                {cameraPhoto !== null && <DeletablePhoto item={cameraPhoto} deletePhoto={(item) => {
+                    deleteImage(item, 'single', setCameraPhoto)
+                }} />}
+
+                {imageList.length > 0 && imageList.map((item, index) => {
+                    return (<DeletablePhoto key={index} deletePhoto={(item) => {
+                        deleteImage(item, 'multiple', setImageList)
+                    }} item={item} />)
+                })}
+            </ScrollView>
+            <SubPopup animation={subPopupAnimation} data={cameraOptions} onPressItem={(item) => {
+                item.id === 0 ? toggleAnimation() : selectedPopupItem(item)
+            }} />
         </CustomSafeAreaView>
     );
 }

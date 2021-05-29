@@ -1,14 +1,14 @@
 import React from 'react'
 import useMainDispatch from "./useMainDispatch"
-import { SET_NAME } from './actionTypes';
-import { initState } from './initialState';
-
+import { setGeneralListAction } from './actionCreator'
 const useMainActions = () => {
     const dispatch = useMainDispatch();
-    const setName = (name) => {
-        dispatch({ type: SET_NAME, payload: name })
+
+    const setGeneralList = (list) => {
+        dispatch(setGeneralListAction(list))
     }
-    const actions = { setName }
+
+    const actions = { setGeneralList }
     return actions
 }
 export default useMainActions

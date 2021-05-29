@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 //animation
 import {
-  Animated, ScrollView,
+  Animated, ScrollView
 } from 'react-native';
 
 //theme
@@ -10,7 +10,7 @@ import { colors, space, sizes, position, radius } from '../../theme';
 //icons
 import { Plus } from '../../components/icons'
 //components
-import { Box, Fab, Card, Button, CardText, SwipeList, Modal, SummaryItem, PageImageBox, ListHiddenItem, CustomSafeAreaView } from '../../components'
+import { FilterColorItem, Box, Fab, Card, Button, CardText, SwipeList, Text, Modal, SkeletonCard, SummaryItem, PageImageBox, ListHiddenItem, CustomSafeAreaView } from '../../components'
 import CheckBox from '@react-native-community/checkbox';
 
 //consts
@@ -19,64 +19,99 @@ import Consts from '../../consts'
 //helpers
 import { dateDiff } from '../../helpers/utils'
 
+import NetInfo from "@react-native-community/netinfo";
 
 
-//state
-import useMainState from '../../context/Main/useMainState';
 
 
-const DATA = [
-  {
-    key: 'bd7acbea-c1b1-46c2-aed5-3431ad53abb28ba',
-    title: '1 asdas das das das d',
-  },
-  {
-    key: '3ac68afc-c605-48d3-a4f8-fb42d91aa97f63',
-    title: '2',
-  },
-  {
-    key: '58694a0f-3da1-471f-bd96-14235571e29d72',
-    title: '3',
-  },
-  {
-    key: '58694a0f-3da1-471f-bd96-14115571e29d72',
-    title: '4',
-  },
-  {
-    key: '58694a0f-3da1-471f-bd96-1435571e29d72',
-    title: '5',
-  },
-  {
-    key: '58694a0f-3da1-471f-bd96-1425571e29d72',
-    title: '6',
-  },
-  {
-    key: '58694a0f-3da1-471f-bd96-1415571e29d72',
-    title: 'Third Item Selamlar Kardeşlerim Nasılsınız İyimisiniz',
-  },
-];
 
+import { useMainState, useMainActions } from '../../context/Main/store'
+import { useOptionsState, useOptionsActions } from '../../context/Options/store'
+
+import { FetchAllOptions } from '../../service/options'
+
+
+import { fetchAllTodo } from '../../service/home'
 const Home = ({ navigation }) => {
   const [rowTranslateAnimatedValues, setRowAnimation] = useState({})
-  const [todoListLoading, setTodoListLoading] = useState(false)
-  const [data, setData] = useState(DATA)
+  const [isLoading, setIsLoading] = useState(false)
+
+  const [modalPhoto, setModalPhoto] = useState(null)
+
   const [modalVisible, setModalVisible] = useState(false)
+  const { generalList } = useMainState()
+  const { setGeneralList } = useMainActions()
+  const [isOffline, setOfflineStatus] = useState(false);
+
+  const [optionsList, setOptionsList] = useState([])
+
+
+
   useEffect(() => {
-    setRowAnimationObject()
-    setTimeout(() => {
-      setTodoListLoading(true)
-    }, 500)
-  }, [])
+    setIsLoading(true)
+    fetchGeneralList('all')
+  }, [isOffline])
+
+  useEffect(() => {
+    if (isOffline === false) {
+      fetchOptionsList();
+    }
+  }, [isOffline])
+
+  const fetchOptionsList = async () => {
+    try {
+      const result = await FetchAllOptions("options")
+      if (result.isSuccess === true) {
+        result?.result?.unshift({
+          customColor: "#8c8c8c",
+          value: 0,
+          label: "All"
+        })
+        setOptionsList(result.result)
+      }
+    } catch (error) {
+      //Errors
+    } finally {
+    }
+  }
+  useEffect(() => {
+    console.log("list", optionsList)
+  }, [optionsList])
+  useEffect(() => {
+    const removeNetInfoSubscription = NetInfo.addEventListener((state) => {
+      const offline = !(state.isConnected && state.isInternetReachable);
+      setOfflineStatus(offline);
+    });
+    return () => removeNetInfoSubscription();
+  }, []);
+
+  const fetchGeneralList = async (query) => {
+    try {
+      const result = await fetchAllTodo(`all?getBy=${query}`)
+      if (result.isSuccess && !result.error) {
+        const data = result.result;
+        data.length > 0 && setGeneralList(data)
+      }
+    } catch (error) {
+
+    }
+    finally {
+      setIsLoading(false)
+    }
+  }
+  useEffect(() => {
+    generalList.length > 0 && setRowAnimationObject()
+  }, [generalList])
   const setRowAnimationObject = () => {
     const obj = {}
-    DATA.forEach((item) => {
-      obj[`${item.key}`] = new Animated.Value(1);
+    generalList.forEach((item) => {
+      obj[`${item.id}`] = new Animated.Value(1);
     })
     setRowAnimation(obj)
   }
   const [toggleCheckBox, setToggleCheckBox] = useState(false)
   const fabAnimation = useRef(new Animated.Value(-500)).current;
-  const [totalDay, setTotalDay] = useState(0)
+  const [totalDay, setTotalDay] = useState("")
   useEffect(() => {
     Animated.timing(fabAnimation, {
       toValue: position.bottom10,
@@ -85,21 +120,25 @@ const Home = ({ navigation }) => {
     }).start()
 
   }, [fabAnimation])
+  useEffect(() => {
+    setTotalDay(dateDiff())
+  }, [])
 
   useEffect(() => {
+    const intervalId = setInterval(() => {
+      setTotalDay(dateDiff())
 
-    const today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 0, 0, 0, 0)
-    const day = dateDiff(today);
-    setTotalDay(day)
+    }, 1000 * 60);
+    return () => clearInterval(intervalId)
   }, [])
   const onRowDidOpen = rowKey => {
     console.log('This row opened', rowKey);
   };
   const deleteRow = (rowMap, rowKey) => {
     // const newData = [...DATA];
-    const newData = data.filter(item => item.key !== rowKey);
+    const newData = data.filter(item => item.id !== rowKey);
     //newData.splice(prevIndex, 1);
-    setData(newData);
+    // setData(newData);
     closeRow(rowMap, rowKey);
 
   };
@@ -112,9 +151,9 @@ const Home = ({ navigation }) => {
   const renderHiddenItem = (data, rowMap) => (
     <>
       <ListHiddenItem closeRow={() => {
-        closeRow(rowMap, data.item.key)
+        closeRow(rowMap, data.item.id)
       }} deleteRow={() => {
-        deleteRow(rowMap, data.item.key)
+        deleteRow(rowMap, data.item.id)
       }} />
     </>
   );
@@ -125,9 +164,9 @@ const Home = ({ navigation }) => {
 
         style={[
           {
-            marginBottom: (DATA.length - 1) === data.index ? 56 : 20,
+            marginBottom: (generalList.length - 1) === data.index ? 56 : 20,
             height: rowTranslateAnimatedValues[
-              data.item.key
+              data.item.id
             ].interpolate({
               inputRange: [0, 1],
               outputRange: [0, 56],
@@ -136,7 +175,7 @@ const Home = ({ navigation }) => {
         ]}
       >
 
-        <Card direction='row'>
+        <Card borderless borderlessColor={data.item.options.customColor} direction='row'>
 
           <Button
 
@@ -145,10 +184,10 @@ const Home = ({ navigation }) => {
             }}
             onLongPress={() => {
               setModalVisible(true)
-              console.log('uzun bastın')
+              setModalPhoto(data?.item?.photos?.[0])
             }}>
             <CardText
-              string={data.item.title.length > Consts.ellipsisLength ? `#${data.index + 1} ` + data.item.title.substring(0, Consts.ellipsisLength) + ` ...` : data.item.title}
+              string={data.item.name.length > Consts.ellipsisLength ? `#${data.index + 1} ` + data.item.name.substring(0, Consts.ellipsisLength) + ` ...` : data.item.name}
             />
           </Button>
 
@@ -174,16 +213,34 @@ const Home = ({ navigation }) => {
             <Plus />
           </Fab>
         </Button>
-        <Modal visible={modalVisible} />
+
+        {(modalVisible && modalPhoto) && <Modal bgImage={modalPhoto} visible={modalVisible} />}
         <PageImageBox image={require('../../images/wallpaper.jpeg')} mainText={Consts.homePageText} subText={`# ${totalDay}`} />
+
         <Box flex={1} p={space.p20}>
-          <SummaryItem />
+
+          <SummaryItem totalCount={generalList.length} />
+          <Box marginBottom={space.mb20} flexDirection="row" alignItems="center" justifyContent="space-evenly">
+            {optionsList?.length > 0 && optionsList.map((opt) => {
+              return (
+                <FilterColorItem onClickFilterItem={() => {
+                  console.log(opt.value, opt.label)
+                }} backgroundColor={opt.customColor} />
+              )
+            })}
+          </Box>
+
           <ScrollView
             showsVerticalScrollIndicator={false}
             showsHorizontalScrollIndicator={false}
           >
-            {todoListLoading === true && <SwipeList
-              data={data}
+            {isLoading === true && [1, 2, 3].map((item) => {
+              return (
+                <SkeletonCard height={56} radius={8} />
+              )
+            })}
+            {(isLoading === false && Object.keys(rowTranslateAnimatedValues).length > 0) && <SwipeList
+              data={generalList}
               style={{
                 flex: 1,
                 backgroundColor: colors.pageBg, overflow: 'hidden'
@@ -204,4 +261,4 @@ const Home = ({ navigation }) => {
     </>
   );
 };
-export default Home;
+export default Home

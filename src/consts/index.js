@@ -2,6 +2,7 @@ import React from 'react'
 import { colors, sizes, space, radius, font, border } from '../theme'
 import { Camera, Folder, Cancel } from '../components/icons'
 const Consts = {
+    okText: 'Tamam',
     homePageText: 'Gece Ayın ve Yıldızların Parladıgı Gün',
     todoListText: 'Yapılacaklar Listesi',
     newTodoTitle: 'Yapılacak İş',

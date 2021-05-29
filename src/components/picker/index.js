@@ -25,7 +25,6 @@ const Picker = ({ placeholder = {}, defaultVal = {}, customCircle, selectedValue
     const [selectedCircleColor, setSelectedCirclerColor] = useState('#fff')
     // const [items, setItems] = useState([]);
     const setSelectedItem = (value) => {
-        console.log('eleman değişti')
         if (customCircle) {
             const isExist = findItem(value)
             if (isExist) {

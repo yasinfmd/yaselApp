@@ -5,9 +5,9 @@ import { Check } from '../../components/icons'
 
 import { colors, radius } from '../../theme'
 
-const BackButton = ({ navigation }) => {
+const BackButton = ({ navigation, onSavePress }) => {
     return (
-        <Button size={46} onPress={() => { navigation.goBack() }} bg={colors.pageBg} borderRadius={radius.full} alignItems='center' justifyContent='center' >
+        <Button size={46} onPress={() => { onSavePress() }} bg={colors.pageBg} borderRadius={radius.full} alignItems='center' justifyContent='center' >
             <Check />
         </Button >
     )

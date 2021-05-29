@@ -43,7 +43,8 @@ export const sizes = {
   fullWidth: '100%',
   fullHeight: '100%',
   height150: 150,
-  height100: 100
+  height100: 100,
+  height400: 400
 }
 
 export const position = {
@@ -70,5 +71,6 @@ export const border = {
 export const opacity = {
   full: 1,
   opacity3: 0.3,
-  opacity4: 0.4
+  opacity4: 0.4,
+  opacity6: 0.4
 }

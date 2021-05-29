@@ -35,9 +35,7 @@ export const RootStackScreen = () => {
                         <BackButton navigation={navigation} />
                     )
                 },
-                headerRight: () => (
-                    <HeaderRightSave navigation={navigation} />
-                ),
+
                 headerStyle: {
                     backgroundColor: colors.pageBg,
                     shadowColor: 'transparent'

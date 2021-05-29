@@ -1,3 +1,3 @@
 export const initState = {
-    name: 'Yasin',
+    generalList: []
 }

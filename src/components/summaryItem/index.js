@@ -6,7 +6,7 @@ import { Box, Button, Text, Title } from '../../components'
 //consts
 import Consts from '../../consts'
 
-const SummaryItem = () => {
+const SummaryItem = ({ totalCount }) => {
     return (
         <>
             <Box justifyContent='center' mb={20}>
@@ -15,7 +15,7 @@ const SummaryItem = () => {
             <Box justifyContent='center' alignItems='flex-end' mb={20}>
                 <Button >
                     <Text letterSpacing={1} fontSize={[12]}>
-                        Toplam Görev Sayısı : 15
+                        Toplam Görev Sayısı : {totalCount}
                     </Text>
                 </Button>
             </Box>
