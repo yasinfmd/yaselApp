@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useLayoutEffect } from 'react'
 
 //components
-import { Input, Box, Picker, CustomSafeAreaView, FormLabel, Button, Text, SubPopup, DeletablePhoto, HeaderRightSave } from '../../components'
+import { Input, FormInput, Box, Picker, CustomSafeAreaView, FormLabel, Button, Text, SubPopup, DeletablePhoto, HeaderRightSave } from '../../components'
 
 //consts
 import Consts from '../../consts'
@@ -25,12 +25,15 @@ import CameraRoll from "@react-native-community/cameraroll";
 import { useIsFocused } from '@react-navigation/native';
 
 import { createNewTodo, isExist } from '../../service/home'
+import { useMainActions, useMainState } from '../../context/Main/store'
+
 
 const ModalScreen = ({ navigation, route, children }) => {
     const myInputRef = useRef(null)
     const [dynamicHeight, setDynamicHeight] = useState(sizes.height56)
     const [imageList, setImageList] = useState([])
     const [cameraPhoto, setCameraPhoto] = useState(null)
+    const [isError, setIsError] = useState(false)
     const [animationValue, setAnimationValue] = useState(-1000)
     const subPopupAnimation = useRef(new Animated.Value(animationValue)).current;
     const [cameraOptions, setCameraOptions] = useState([])
@@ -39,6 +42,8 @@ const ModalScreen = ({ navigation, route, children }) => {
     const [isExistTodo, setIsExistTodo] = useState(false)
     const [isExistLoading, setIsExistLoading] = useState(false)
     const [createLoading, setCreateLoading] = useState(false)
+    const { setGeneralList } = useMainActions()
+    const { generalList } = useMainState()
     React.useEffect(() => {
         if (route.params?.images) {
             const list = route.params?.images.map((item, index) => {
@@ -150,22 +155,22 @@ const ModalScreen = ({ navigation, route, children }) => {
 
     }, [navigation, newTodoModel, createLoading, cameraPhoto]);
     useLayoutEffect(() => {
-        getAlbums()
+        // getAlbums()
     }, [])
 
     const getAlbums = async () => {
-        const cameraResult = await checkCameraPermission();
-        const readStorageResult = await checkPermissionResult('READ_EXTERNAL_STORAGE', `${EmojiConsts.folder} Yasel Uygulaması Resim Erişimi`, `Uygulamaya Galerinizden Fotoğraf yüklemek için izin vermeniz gerekmektedir ${EmojiConsts.attention}`);
-        const writeStorageResult = await checkPermissionResult('WRITE_EXTERNAL_STORAGE', `${EmojiConsts.folder} Yasel Uygulaması Dosya Yazma Erişim,`, `Uygulamaya Çektiğiniz Fotoğrafları Galeriye yüklemek için izin vermeniz gerekmektedir ${EmojiConsts.attention}`);
-        let cameraOptList = [{ id: 1, label: 'Kamera', showNewPage: false, icon: <Camera /> }]
-        if (cameraResult === 1 && readStorageResult === 1 && writeStorageResult === 1) {
-            const albums = await CameraRoll.getAlbums({ assetType: 'Photos' })
-            albums.forEach((item, index) => {
-                cameraOptList = [...cameraOptList, { id: index + 2, count: item.count, showNewPage: true, label: item.title, icon: <Folder /> }]
-            })
-        }
-        cameraOptList = [...cameraOptList, { id: 0, label: 'Vazgeç', showNewPage: false, icon: <Cancel /> }]
-        setCameraOptions(cameraOptList)
+        // const cameraResult = await checkCameraPermission();
+        // const readStorageResult = await checkPermissionResult('READ_EXTERNAL_STORAGE', `${EmojiConsts.folder} Yasel Uygulaması Resim Erişimi`, `Uygulamaya Galerinizden Fotoğraf yüklemek için izin vermeniz gerekmektedir ${EmojiConsts.attention}`);
+        // const writeStorageResult = await checkPermissionResult('WRITE_EXTERNAL_STORAGE', `${EmojiConsts.folder} Yasel Uygulaması Dosya Yazma Erişim,`, `Uygulamaya Çektiğiniz Fotoğrafları Galeriye yüklemek için izin vermeniz gerekmektedir ${EmojiConsts.attention}`);
+        // let cameraOptList = [{ id: 1, label: 'Kamera', showNewPage: false, icon: <Camera /> }]
+        // if (cameraResult === 1 && readStorageResult === 1 && writeStorageResult === 1) {
+        //     const albums = await CameraRoll.getAlbums({ assetType: 'Photos' })
+        //     albums.forEach((item, index) => {
+        //         cameraOptList = [...cameraOptList, { id: index + 2, count: item.count, showNewPage: true, label: item.title, icon: <Folder /> }]
+        //     })
+        // }
+        // cameraOptList = [...cameraOptList, { id: 0, label: 'Vazgeç', showNewPage: false, icon: <Cancel /> }]
+        // setCameraOptions(cameraOptList)
     }
     const deleteImage = (item, type, setFunction) => {
         if (type === 'single') {
@@ -202,30 +207,36 @@ const ModalScreen = ({ navigation, route, children }) => {
     }
     const onFormControl = () => {
 
-        const data = new FormData();
-        if (cameraPhoto) {
-            for (let index = 0; index < 1; index++) {
-                data.append('files', {
-                    name: cameraPhoto.file_name,
-                    type: "image/jpeg",
-                    uri: cameraPhoto.uri
-                })
-            }
+        //const data = new FormData();
+        // if (cameraPhoto) {
+        //     for (let index = 0; index < 1; index++) {
+        //         data.append('files', {
+        //             name: cameraPhoto.file_name,
+        //             type: "image/jpeg",
+        //             uri: cameraPhoto.uri
+        //         })
+        //     }
 
+        // } else {
+        //     newTodoModel?.image?.forEach((item) => {
+        //         data.append('files', {
+        //             name: item.file_name,
+        //             type: item.type,
+        //             uri: item.uri
+        //         });
+        //     })
+        // }
+        // data.append('categoryId', 1)
+        // data.append('name', newTodoModel.name)
+        // data.append('priorty', newTodoModel.priorty.value)
+        if (newTodoModel.name.length === 0) {
+            setIsError(true)
         } else {
-            newTodoModel?.image?.forEach((item) => {
-                data.append('files', {
-                    name: item.file_name,
-                    type: item.type,
-                    uri: item.uri
-                });
-            })
+            setIsError(false)
+            setCreateLoading(true)
+            saveTodo({ categoryId: 1, name: newTodoModel.name, priorty: newTodoModel.priorty.value })
         }
-        data.append('categoryId', 1)
-        data.append('name', newTodoModel.name)
-        data.append('priorty', newTodoModel.priorty.value)
-        setCreateLoading(true)
-        saveTodo(data)
+
     }
 
     const resetForm = () => {
@@ -237,10 +248,18 @@ const ModalScreen = ({ navigation, route, children }) => {
 
     const saveTodo = async (data) => {
         try {
-            const result = await createNewTodo('todo', data, {
-                'Content-Type': 'multipart/form-data'
-            })
+            const result = await createNewTodo('todo', data)
             if (result.isSuccess && !result.error) {
+                const mappedResult = {
+                    ...result.result, options: {
+                        customColor: newTodoModel.priorty.customColor,
+                        id: newTodoModel.priorty.value,
+                        name: newTodoModel.priorty.label
+                    }
+                }
+                const newGeneralList = [...generalList, mappedResult]
+                console.log('result', result)
+                setGeneralList(newGeneralList)
                 resetForm()
                 navigation.goBack()
             }
@@ -268,7 +287,15 @@ const ModalScreen = ({ navigation, route, children }) => {
             }}>
                 <Box >
                     <FormLabel title={Consts.newTodoTitle} />
-                    <Input value={newTodoModel.name} ref={myInputRef} placeholder={`${Consts.newTodoPlaceholder} ${EmojiConsts.smile}`} showSoftInputOnFocus={true} multiline={true} returnKeyType='done'
+                    <FormInput
+                        value={newTodoModel.name}
+                        ref={myInputRef}
+                        placeholder={`${Consts.newTodoPlaceholder} ${EmojiConsts.smile}`}
+                        showSoftInputOnFocus={true}
+                        multiline={true}
+                        isError={isError}
+                        errorText={"Minimum 3 Karakter Girilmelidir ."}
+                        returnKeyType='done'
                         onSubmitEditing={(e) => {
                         }}
                         onChangeText={(text) => {
@@ -277,10 +304,20 @@ const ModalScreen = ({ navigation, route, children }) => {
                         }}
                         onContentSizeChange={(e) => {
                             e.nativeEvent.contentSize.height > sizes.height56 ? setDynamicHeight(e.nativeEvent.contentSize.height) : sizes.height56
-                        }} blurOnSubmit={true} mb={space.mb20} bg={colors.white} width='100%' borderRadius={radius.bsmall} fontSize={font.size14} maxHeight={200} height={dynamicHeight}
+                        }}
+                        blurOnSubmit={true}
+                        mb={space.mb20}
+                        bg={colors.white}
+                        width='100%'
+                        borderRadius={radius.bsmall}
+                        fontSize={font.size14}
+                        maxHeight={200}
+                        height={dynamicHeight}
                         borderColor={isExistTodo ? 'red' : colors.borderColor}
-                        pl={space.pl16} py={space.pv17} pr={60} border={border.xsmall} color={colors.inputText} />
-                    {isExistLoading === true && <ActivityIndicator color='red' size='small' style={{ position: 'absolute', right: 20, top: 42, }} />}
+                        pl={space.pl16} py={space.pv17} pr={60} border={border.xsmall} color={colors.inputText}
+                        showIndicator={isExistLoading}
+                    />
+                    {/* {isExistLoading === true && <ActivityIndicator color='red' size='small' style={{ position: 'absolute', right: 20, top: 42, }} />} */}
 
                 </Box>
                 <Box>
@@ -292,12 +329,12 @@ const ModalScreen = ({ navigation, route, children }) => {
                         Keyboard.dismiss();
                     }} />
                 </Box>
-                <Box alignItems='center' justifyContent='center'>
+                {/* <Box alignItems='center' justifyContent='center'>
                     <Button mt={space.mr20} onPress={() => {
                         Keyboard.dismiss();
                         toggleAnimation()
                     }}><Camera /></Button>
-                </Box>
+                </Box> */}
 
             </Box>
             <Box alignItems='center' justifyContent='center'>
@@ -318,9 +355,9 @@ const ModalScreen = ({ navigation, route, children }) => {
                     }} item={item} />)
                 })}
             </ScrollView>
-            <SubPopup animation={subPopupAnimation} data={cameraOptions} onPressItem={(item) => {
+            {/* <SubPopup animation={subPopupAnimation} data={cameraOptions} onPressItem={(item) => {
                 item.id === 0 ? toggleAnimation() : selectedPopupItem(item)
-            }} />
+            }} /> */}
         </CustomSafeAreaView>
     );
 }

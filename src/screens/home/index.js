@@ -22,21 +22,23 @@ import { dateDiff } from '../../helpers/utils'
 import NetInfo from "@react-native-community/netinfo";
 
 
+import { useIsFocused } from '@react-navigation/native';
 
 
 
 import { useMainState, useMainActions } from '../../context/Main/store'
-import { useOptionsState, useOptionsActions } from '../../context/Options/store'
 
 import { FetchAllOptions } from '../../service/options'
 
 
 import { fetchAllTodo } from '../../service/home'
-const Home = ({ navigation }) => {
+const Home = ({ navigation, route }) => {
   const [rowTranslateAnimatedValues, setRowAnimation] = useState({})
   const [isLoading, setIsLoading] = useState(false)
 
   const [modalPhoto, setModalPhoto] = useState(null)
+  const isFocused = useIsFocused();
+
 
   const [modalVisible, setModalVisible] = useState(false)
   const { generalList } = useMainState()
@@ -74,9 +76,7 @@ const Home = ({ navigation }) => {
     } finally {
     }
   }
-  useEffect(() => {
-    console.log("list", optionsList)
-  }, [optionsList])
+
   useEffect(() => {
     const removeNetInfoSubscription = NetInfo.addEventListener((state) => {
       const offline = !(state.isConnected && state.isInternetReachable);
@@ -99,7 +99,9 @@ const Home = ({ navigation }) => {
       setIsLoading(false)
     }
   }
+
   useEffect(() => {
+    setRowAnimation({})
     generalList.length > 0 && setRowAnimationObject()
   }, [generalList])
   const setRowAnimationObject = () => {
@@ -165,18 +167,18 @@ const Home = ({ navigation }) => {
         style={[
           {
             marginBottom: (generalList.length - 1) === data.index ? 56 : 20,
-            height: rowTranslateAnimatedValues[
+            height: rowTranslateAnimatedValues[data.item.id] ? rowTranslateAnimatedValues[
               data.item.id
             ].interpolate({
               inputRange: [0, 1],
               outputRange: [0, 56],
-            }),
+            }) : 56
+            ,
           },
         ]}
       >
 
         <Card borderless borderlessColor={data.item.options.customColor} direction='row'>
-
           <Button
 
             onPressOut={() => {
@@ -184,7 +186,6 @@ const Home = ({ navigation }) => {
             }}
             onLongPress={() => {
               setModalVisible(true)
-              setModalPhoto(data?.item?.photos?.[0])
             }}>
             <CardText
               string={data.item.name.length > Consts.ellipsisLength ? `#${data.index + 1} ` + data.item.name.substring(0, Consts.ellipsisLength) + ` ...` : data.item.name}
@@ -214,7 +215,7 @@ const Home = ({ navigation }) => {
           </Fab>
         </Button>
 
-        {(modalVisible && modalPhoto) && <Modal bgImage={modalPhoto} visible={modalVisible} />}
+        {(modalVisible) && <Modal visible={modalVisible} />}
         <PageImageBox image={require('../../images/wallpaper.jpeg')} mainText={Consts.homePageText} subText={`# ${totalDay}`} />
 
         <Box flex={1} p={space.p20}>

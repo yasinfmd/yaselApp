@@ -28,3 +28,5 @@ export { default as PhotoGrid } from './photoGrid'
 export { default as DeletablePhoto } from './deletablePhoto'
 export { default as SkeletonCard } from './skeletonCard'
 export { default as FilterColorItem } from './filterColorItem'
+export { default as FormInput } from './formInput'
+

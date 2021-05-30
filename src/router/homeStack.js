@@ -3,6 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 //pages
 import Home from '../screens/home'
+import { View, Text } from 'react-native'
 
 //stack
 const HomeStack = createStackNavigator();
@@ -18,7 +19,7 @@ function DetailsScreen() {
 export const HomeStackRouter = () => {
     return (
         <HomeStack.Navigator headerMode="none">
-            <HomeStack.Screen name='Seni Seviyorum Yavru 👅' component={Home} />
+            <HomeStack.Screen name='Home' component={Home} />
             <HomeStack.Screen name='Detail' component={DetailsScreen} />
         </HomeStack.Navigator>
     )
