@@ -25,12 +25,18 @@ const randomImages = [
     "https://images.unsplash.com/photo-1510797215324-95aa89f43c33?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=675&q=80",
     "https://images.unsplash.com/photo-1572099606223-6e29045d7de3?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80",
     "https://images.unsplash.com/photo-1474524955719-b9f87c50ce47?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1052&q=80",
-    "https://images.unsplash.com/photo-1444877466744-dc2f2af2b931?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1489&q=80"
+    "https://images.unsplash.com/photo-1444877466744-dc2f2af2b931?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1489&q=80",
+    "https://images.unsplash.com/photo-1500622944204-b135684e99fd?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1901&q=80",
+    "https://images.unsplash.com/photo-1546587348-d12660c30c50?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1053&q=80",
+    "https://images.unsplash.com/photo-1448518340475-e3c680e9b4be?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1051&q=80",
+    "https://images.unsplash.com/photo-1623217740699-9da9552679d1?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80"
+
+
 ]
 
 //consts
 import Consts from '../../consts'
-const CustomModal = ({ visible, onRequestClose, children }) => {
+const CustomModal = ({ visible, onRequestClose, children, subText }) => {
     return (
         <Modal
             hardwareAccelerated={true}
@@ -45,26 +51,26 @@ const CustomModal = ({ visible, onRequestClose, children }) => {
             }}
         >
             <BoxCenter  >
-                <Box bg={colors.white} alignItems='center' p={space.p20} style={{
+                <Box bg={colors.white} alignItems='center' style={{
                     height: '50%',
                     width: "80%",
-                    borderRadius: 20,
                     ...Consts.defaultShadow
                 }} >
-                    <ImageBackground source={{ uri: randomImages[Math.floor(Math.random() * 16)] }} style={{
+                    <ImageBackground source={{ uri: randomImages[Math.floor(Math.random() * 20)] }} style={{
                         flex: 1,
                         resizeMode: "cover",
                         justifyContent: "center",
                         width: "100%",
-                        height: "100%"
+                        height: "100%",
+                        borderRadius: 20
                     }}>
                         <Text color={colors.white}
 
                             letterSpacing={1}
-                            style={{ backgroundColor: "#000000a0", textAlign: "center" }}
+                            style={{ backgroundColor: "#000000a0", textAlign: "center", position: "absolute", bottom: 0, width: "100%" }}
                             fontFamily='BadScript-Regular'
                             fontSize={[12]}>
-                            Olmak İstediğim Yerler
+                            {subText}
                         </Text>
                     </ImageBackground>
 

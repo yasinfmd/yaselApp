@@ -12,7 +12,7 @@ if (__DEV__) {
 } else {
     baseUrl = API_URL
 }
-
+baseUrl = "https://morning-garden-20509.herokuapp.com/api/yasel/"
 //API_URL
 // if (token !== undefined && token !== null) {
 //     try {

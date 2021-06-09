@@ -23,7 +23,7 @@ const SwipeList = ({ data, renderItem, renderHiddenItem, onRowDidOpen, consts = 
             renderHiddenItem={renderHiddenItem}
             rightOpenValue={consts.rightOpenValue}
             disableRightSwipe
-            previewRowKey={'0'}
+            previewRowKey={50}
             previewOpenValue={consts.rightOpenValue}
             previewOpenDelay={consts.previewOpenDelay}
             onRowDidOpen={onRowDidOpen}

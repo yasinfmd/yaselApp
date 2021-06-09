@@ -7,8 +7,10 @@ import {
 //theme
 import { colors, space, sizes, position, radius } from '../../theme';
 
+
+
 //icons
-import { Plus } from '../../components/icons'
+import { Plus, Cancel, Delete } from '../../components/icons'
 //components
 import { FilterColorItem, Box, Fab, Card, Button, CardText, SwipeList, Text, Modal, SkeletonCard, SummaryItem, PageImageBox, ListHiddenItem, CustomSafeAreaView } from '../../components'
 import CheckBox from '@react-native-community/checkbox';
@@ -33,12 +35,9 @@ import { FetchAllOptions } from '../../service/options'
 
 import { fetchAllTodo } from '../../service/home'
 const Home = ({ navigation, route }) => {
-  const [rowTranslateAnimatedValues, setRowAnimation] = useState({})
   const [isLoading, setIsLoading] = useState(false)
 
-  const [modalPhoto, setModalPhoto] = useState(null)
-  const isFocused = useIsFocused();
-
+  const [modalSubText, setModalSubText] = useState("")
 
   const [modalVisible, setModalVisible] = useState(false)
   const { generalList } = useMainState()
@@ -46,12 +45,9 @@ const Home = ({ navigation, route }) => {
   const [isOffline, setOfflineStatus] = useState(false);
 
   const [optionsList, setOptionsList] = useState([])
-
-
-
   useEffect(() => {
     setIsLoading(true)
-    fetchGeneralList('all')
+    fetchGeneralList('All')
   }, [isOffline])
 
   useEffect(() => {
@@ -100,18 +96,7 @@ const Home = ({ navigation, route }) => {
     }
   }
 
-  useEffect(() => {
-    setRowAnimation({})
-    generalList.length > 0 && setRowAnimationObject()
-  }, [generalList])
-  const setRowAnimationObject = () => {
-    const obj = {}
-    generalList.forEach((item) => {
-      obj[`${item.id}`] = new Animated.Value(1);
-    })
-    setRowAnimation(obj)
-  }
-  const [toggleCheckBox, setToggleCheckBox] = useState(false)
+
   const fabAnimation = useRef(new Animated.Value(-500)).current;
   const [totalDay, setTotalDay] = useState("")
   useEffect(() => {
@@ -138,9 +123,11 @@ const Home = ({ navigation, route }) => {
   };
   const deleteRow = (rowMap, rowKey) => {
     // const newData = [...DATA];
-    const newData = data.filter(item => item.id !== rowKey);
+    const newData = generalList.filter((item) => item.id != rowKey)
+    setGeneralList(newData)
     //newData.splice(prevIndex, 1);
     // setData(newData);
+
     closeRow(rowMap, rowKey);
 
   };
@@ -150,15 +137,21 @@ const Home = ({ navigation, route }) => {
     }
   };
 
-  const renderHiddenItem = (data, rowMap) => (
-    <>
-      <ListHiddenItem closeRow={() => {
-        closeRow(rowMap, data.item.id)
-      }} deleteRow={() => {
-        deleteRow(rowMap, data.item.id)
-      }} />
-    </>
-  );
+  const onFilterList = ({ value, label }) => {
+    setIsLoading(true)
+    fetchGeneralList(value === 0 ? label : value)
+  }
+
+  const renderHiddenItem = (data, rowMap) => {
+
+    return (
+      <>
+        <ListHiddenItem closeRow={() => {
+          closeRow(rowMap, data.item.id)
+        }} />
+      </>
+    );
+  }
   /* { item, index } */
   const renderItem = (data) => (
     <>
@@ -167,12 +160,7 @@ const Home = ({ navigation, route }) => {
         style={[
           {
             marginBottom: (generalList.length - 1) === data.index ? 56 : 20,
-            height: rowTranslateAnimatedValues[data.item.id] ? rowTranslateAnimatedValues[
-              data.item.id
-            ].interpolate({
-              inputRange: [0, 1],
-              outputRange: [0, 56],
-            }) : 56
+            height: 56
             ,
           },
         ]}
@@ -185,6 +173,7 @@ const Home = ({ navigation, route }) => {
               setModalVisible(false)
             }}
             onLongPress={() => {
+              setModalSubText(data.item.name)
               setModalVisible(true)
             }}>
             <CardText
@@ -196,9 +185,9 @@ const Home = ({ navigation, route }) => {
             tintColors={{ true: colors.primary, false: colors.pageBg }}
             hideBox
             style={{ marginRight: 16 }}
-            disabled={false}
-            value={toggleCheckBox}
-            onValueChange={(newValue) => setToggleCheckBox(newValue)}
+            disabled={!data.item.active}
+            value={!data.item.active}
+            onValueChange={(newValue) => { console.log(newValue) }}
           />
         </Card>
       </Animated.View>
@@ -215,17 +204,18 @@ const Home = ({ navigation, route }) => {
           </Fab>
         </Button>
 
-        {(modalVisible) && <Modal visible={modalVisible} />}
+        {(modalVisible && modalSubText !== "") && <Modal visible={modalVisible} subText={modalSubText} />}
         <PageImageBox image={require('../../images/wallpaper.jpeg')} mainText={Consts.homePageText} subText={`# ${totalDay}`} />
 
         <Box flex={1} p={space.p20}>
 
-          <SummaryItem totalCount={generalList.length} />
+          <SummaryItem totalCount={isLoading === true ? "Henüz Bilinmiyor" : generalList.length} />
           <Box marginBottom={space.mb20} flexDirection="row" alignItems="center" justifyContent="space-evenly">
             {optionsList?.length > 0 && optionsList.map((opt) => {
               return (
                 <FilterColorItem onClickFilterItem={() => {
-                  console.log(opt.value, opt.label)
+                  onFilterList(opt)
+
                 }} backgroundColor={opt.customColor} />
               )
             })}
@@ -240,22 +230,20 @@ const Home = ({ navigation, route }) => {
                 <SkeletonCard height={56} radius={8} />
               )
             })}
-            {(isLoading === false && Object.keys(rowTranslateAnimatedValues).length > 0) && <SwipeList
-              data={generalList}
-              style={{
-                flex: 1,
-                backgroundColor: colors.pageBg, overflow: 'hidden'
-              }}
-              renderItem={renderItem}
-              renderHiddenItem={renderHiddenItem}
-              rightOpenValue={-90}
-              disableRightSwipe
-              previewRowKey={'0'}
-              previewOpenValue={20}
-              previewOpenDelay={100}
-              onRowDidOpen={onRowDidOpen}
-              useNativeDriver={true}
-            />}
+            {(isLoading === false && generalList.length > 0) &&
+              <SwipeList
+                data={generalList}
+                style={{
+                  flex: 1,
+                  backgroundColor: colors.pageBg, overflow: 'hidden'
+                }}
+                renderItem={renderItem}
+                renderHiddenItem={renderHiddenItem}
+                disableRightSwipe
+                onRowDidOpen={onRowDidOpen}
+                useNativeDriver={true}
+              />
+            }
           </ScrollView>
         </Box>
       </CustomSafeAreaView>
