@@ -66,7 +66,7 @@ const Film = ({ navigation }) => {
             case 8:
                 return require(`../../animations/51928-kiss.json`)
             case 9:
-                return require(`../../animations/52776-love-hearts.json`)
+                return require(`../../animations/15440-love-heart.json`)
         }
     }
 

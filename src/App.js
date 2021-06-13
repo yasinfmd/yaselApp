@@ -9,7 +9,7 @@ import { OptionsProvider } from "./context/Options/store"
 
 const App = () => {
   useEffect(() => {
-    const sound = new Sound('startmusic.mp3', Sound.MAIN_BUNDLE, error => {
+    const sound = new Sound('start.mp3', Sound.MAIN_BUNDLE, error => {
       if (error) {
         console.log('failed to load the sound', error);
         return;
@@ -22,7 +22,6 @@ const App = () => {
         }
       });
     });
-    sound.setNumberOfLoops(-1);
     sound.setVolume(1);
 
     customInterval = setTimeout(() => {
