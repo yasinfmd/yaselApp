@@ -14,6 +14,15 @@
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		C133E177E7F24C0C9BDA792E /* BadScript-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A3F9CFAE947447BCACC115A0 /* BadScript-Regular.ttf */; };
 		4897E54FC07A4549A01A47F0 /* BadScript-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7D99F039CFF149628DEA7608 /* BadScript-Regular.ttf */; };
+		604D4E73F8D74364AE330797 /* Big-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8715762D1BA5482887A46311 /* Big-Regular.ttf */; };
+		2B5780AC8625488FA3E25C9E /* ShadowsIntoLight-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 697FBEF3DF5E4A93950324A9 /* ShadowsIntoLight-Regular.ttf */; };
+		A94015EB7BF4453A8BB28B41 /* Courgette-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EE04C51D4CDB4489B5F6077A /* Courgette-Regular.ttf */; };
+		0B56E60CA6E94DF69A8CED93 /* Charmonman-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 28D39FDBFD35435A9A9ED32B /* Charmonman-Regular.ttf */; };
+		30AF36E4553B482A92E5B6F1 /* Italianno-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 82BC2DCAD9D0406FABED59B9 /* Italianno-Regular.ttf */; };
+		F492D043364344EFBC261F69 /* Merriweather-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 02930B062E034D2F9406FAEF /* Merriweather-Regular.ttf */; };
+		09B35F708B644BCC9EACDD9C /* NanumMyeongjo-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 61D690041A7341FA960FC73D /* NanumMyeongjo-Regular.ttf */; };
+		55704E05023742ED9AB5FBC0 /* Sacramento-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F9B4C4DC02834A1C90D79727 /* Sacramento-Regular.ttf */; };
+		BA123A669D234E3DA8A9C1E8 /* UbuntuMono-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AE2767FAB19E4213B139A633 /* UbuntuMono-Regular.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +49,15 @@
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		A3F9CFAE947447BCACC115A0 /* BadScript-Regular.ttf */ = {isa = PBXFileReference; name = "BadScript-Regular.ttf"; path = "../src/fonts/BadScript-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		7D99F039CFF149628DEA7608 /* BadScript-Regular.ttf */ = {isa = PBXFileReference; name = "BadScript-Regular.ttf"; path = "../assets/fonts/BadScript-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		8715762D1BA5482887A46311 /* Big-Regular.ttf */ = {isa = PBXFileReference; name = "Big-Regular.ttf"; path = "../assets/fonts/Big-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		697FBEF3DF5E4A93950324A9 /* ShadowsIntoLight-Regular.ttf */ = {isa = PBXFileReference; name = "ShadowsIntoLight-Regular.ttf"; path = "../assets/fonts/ShadowsIntoLight-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		EE04C51D4CDB4489B5F6077A /* Courgette-Regular.ttf */ = {isa = PBXFileReference; name = "Courgette-Regular.ttf"; path = "../assets/fonts/Courgette-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		28D39FDBFD35435A9A9ED32B /* Charmonman-Regular.ttf */ = {isa = PBXFileReference; name = "Charmonman-Regular.ttf"; path = "../assets/fonts/Charmonman-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		82BC2DCAD9D0406FABED59B9 /* Italianno-Regular.ttf */ = {isa = PBXFileReference; name = "Italianno-Regular.ttf"; path = "../assets/fonts/Italianno-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		02930B062E034D2F9406FAEF /* Merriweather-Regular.ttf */ = {isa = PBXFileReference; name = "Merriweather-Regular.ttf"; path = "../assets/fonts/Merriweather-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		61D690041A7341FA960FC73D /* NanumMyeongjo-Regular.ttf */ = {isa = PBXFileReference; name = "NanumMyeongjo-Regular.ttf"; path = "../assets/fonts/NanumMyeongjo-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		F9B4C4DC02834A1C90D79727 /* Sacramento-Regular.ttf */ = {isa = PBXFileReference; name = "Sacramento-Regular.ttf"; path = "../assets/fonts/Sacramento-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		AE2767FAB19E4213B139A633 /* UbuntuMono-Regular.ttf */ = {isa = PBXFileReference; name = "UbuntuMono-Regular.ttf"; path = "../assets/fonts/UbuntuMono-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -134,6 +152,15 @@
 			children = (
 				A3F9CFAE947447BCACC115A0 /* BadScript-Regular.ttf */,
 				7D99F039CFF149628DEA7608 /* BadScript-Regular.ttf */,
+				8715762D1BA5482887A46311 /* Big-Regular.ttf */,
+				697FBEF3DF5E4A93950324A9 /* ShadowsIntoLight-Regular.ttf */,
+				EE04C51D4CDB4489B5F6077A /* Courgette-Regular.ttf */,
+				28D39FDBFD35435A9A9ED32B /* Charmonman-Regular.ttf */,
+				82BC2DCAD9D0406FABED59B9 /* Italianno-Regular.ttf */,
+				02930B062E034D2F9406FAEF /* Merriweather-Regular.ttf */,
+				61D690041A7341FA960FC73D /* NanumMyeongjo-Regular.ttf */,
+				F9B4C4DC02834A1C90D79727 /* Sacramento-Regular.ttf */,
+				AE2767FAB19E4213B139A633 /* UbuntuMono-Regular.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -231,6 +258,15 @@
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				C133E177E7F24C0C9BDA792E /* BadScript-Regular.ttf in Resources */,
 				4897E54FC07A4549A01A47F0 /* BadScript-Regular.ttf in Resources */,
+				604D4E73F8D74364AE330797 /* Big-Regular.ttf in Resources */,
+				2B5780AC8625488FA3E25C9E /* ShadowsIntoLight-Regular.ttf in Resources */,
+				A94015EB7BF4453A8BB28B41 /* Courgette-Regular.ttf in Resources */,
+				0B56E60CA6E94DF69A8CED93 /* Charmonman-Regular.ttf in Resources */,
+				30AF36E4553B482A92E5B6F1 /* Italianno-Regular.ttf in Resources */,
+				F492D043364344EFBC261F69 /* Merriweather-Regular.ttf in Resources */,
+				09B35F708B644BCC9EACDD9C /* NanumMyeongjo-Regular.ttf in Resources */,
+				55704E05023742ED9AB5FBC0 /* Sacramento-Regular.ttf in Resources */,
+				BA123A669D234E3DA8A9C1E8 /* UbuntuMono-Regular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
