@@ -8,11 +8,12 @@ let defaultHeader = {
 }
 let baseUrl = ''
 if (__DEV__) {
-    baseUrl = DEV_API_URL
+    baseUrl = API_URL
+    //        DEV_API_URL
 } else {
     baseUrl = API_URL
 }
-baseUrl = "https://morning-garden-20509.herokuapp.com/api/yasel/"
+//baseUrl = DEV_API_URL
 //API_URL
 // if (token !== undefined && token !== null) {
 //     try {

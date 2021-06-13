@@ -33,7 +33,7 @@ import { useMainState, useMainActions } from '../../context/Main/store'
 import { FetchAllOptions } from '../../service/options'
 
 
-import { fetchAllTodo } from '../../service/home'
+import { fetchAllTodo, updateTodo, deleteTodo } from '../../service/home'
 const Home = ({ navigation, route }) => {
   const [isLoading, setIsLoading] = useState(false)
 
@@ -121,15 +121,18 @@ const Home = ({ navigation, route }) => {
   const onRowDidOpen = rowKey => {
     console.log('This row opened', rowKey);
   };
-  const deleteRow = (rowMap, rowKey) => {
-    // const newData = [...DATA];
-    const newData = generalList.filter((item) => item.id != rowKey)
-    setGeneralList(newData)
-    //newData.splice(prevIndex, 1);
-    // setData(newData);
 
+  const deleteRow = async (rowMap, rowKey) => {
+    try {
+      const result = await deleteTodo(`deleteTodo?todoId=${rowKey}`, {})
+      if (result.isSuccess) {
+        const newData = generalList.filter((item) => item.id != rowKey)
+        setGeneralList(newData)
+      }
+    } catch (error) {
+      console.log('error', error)
+    }
     closeRow(rowMap, rowKey);
-
   };
   const closeRow = (rowMap, rowKey) => {
     if (rowMap[rowKey]) {
@@ -142,11 +145,30 @@ const Home = ({ navigation, route }) => {
     fetchGeneralList(value === 0 ? label : value)
   }
 
+  const updateStatus = async (data, val) => {
+    try {
+      const result = await updateTodo(`updateTodo?todoId=${data.item.id}`, {})
+      if (result.isSuccess) {
+        const newList = [...generalList]
+        newList.forEach((item) => {
+          if (item.id === data.item.id) {
+            item.active = false
+          }
+        })
+        setGeneralList(newList)
+      }
+    } catch (error) {
+      console.log('error', error)
+    }
+  }
+
   const renderHiddenItem = (data, rowMap) => {
 
     return (
       <>
-        <ListHiddenItem closeRow={() => {
+        <ListHiddenItem deleteRow={() => {
+          deleteRow(rowMap, data.item.id)
+        }} closeRow={() => {
           closeRow(rowMap, data.item.id)
         }} />
       </>
@@ -156,7 +178,7 @@ const Home = ({ navigation, route }) => {
   const renderItem = (data) => (
     <>
       <Animated.View
-
+        key={data.index}
         style={[
           {
             marginBottom: (generalList.length - 1) === data.index ? 56 : 20,
@@ -187,7 +209,7 @@ const Home = ({ navigation, route }) => {
             style={{ marginRight: 16 }}
             disabled={!data.item.active}
             value={!data.item.active}
-            onValueChange={(newValue) => { console.log(newValue) }}
+            onValueChange={(newValue) => { updateStatus(data, newValue) }}
           />
         </Card>
       </Animated.View>
