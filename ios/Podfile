@@ -22,6 +22,10 @@ target 'Yasel' do
 
   pod 'react-native-cameraroll', :path => '../node_modules/@react-native-community/cameraroll'
 
+  pod 'RNFBMessaging', :path => '../node_modules/@react-native-firebase/messaging'
+
+  pod 'RNFBApp', :path => '../node_modules/@react-native-firebase/app'
+
   target 'YaselTests' do
     inherit! :complete
     # Pods for testing

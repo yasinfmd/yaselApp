@@ -13,7 +13,7 @@ if (__DEV__) {
 } else {
     baseUrl = API_URL
 }
-//baseUrl = DEV_API_URL
+baseUrl = DEV_API_URL
 //API_URL
 // if (token !== undefined && token !== null) {
 //     try {

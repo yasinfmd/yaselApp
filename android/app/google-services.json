@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "235247007793",
+    "project_id": "yasel-ffea7",
+    "storage_bucket": "yasel-ffea7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:235247007793:android:ac0c5867a27087f123fd10",
+        "android_client_info": {
+          "package_name": "com.yasel"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "235247007793-go469jgupd4068uiockcspanrr0jg692.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZxNyip-SPU9OxSdrp4loEkbPQNQlQ7nk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "235247007793-go469jgupd4068uiockcspanrr0jg692.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
